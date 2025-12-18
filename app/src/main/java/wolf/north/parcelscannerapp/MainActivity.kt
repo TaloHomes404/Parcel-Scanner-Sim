@@ -24,6 +24,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+
+
+//Preview home screen
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {

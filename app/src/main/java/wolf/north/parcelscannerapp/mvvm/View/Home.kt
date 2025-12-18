@@ -1,4 +1,110 @@
 package wolf.north.parcelscannerapp.mvvm.View
 
-class Home {
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButtonDefaults.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen(
+    modifier: Modifier = Modifier
+) {
+
+
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Parcel Scanner") }
+            )
+        },
+        bottomBar = {
+            BottomNavigation {
+                BottomNavigationItem(
+                    selected = true,
+                    onClick = { },
+                    icon = { Icon(Icons.Default.Home, contentDescription = null) }
+                )
+                BottomNavigationItem(
+                    selected = false,
+                    onClick = { },
+                    icon = { Icon(Icons.Default.List, contentDescription = null) }
+                )
+                BottomNavigationItem(
+                    selected = false,
+                    onClick = { },
+                    icon = { Icon(Icons.Default.Person, contentDescription = null) }
+                )
+            }
+        }
+    ) { paddingValues ->
+
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Button(onClick = { }) {
+                            Text("Package")
+                        }
+                        Button(onClick = { }) {
+                            Text("Form")
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    Icon(
+                        imageVector = Icons.Default.CameraAlt,
+                        contentDescription = "Open scanner",
+                        modifier = Modifier.size(96.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun HomeScreenPreview() {
+    HomeScreen()
 }
