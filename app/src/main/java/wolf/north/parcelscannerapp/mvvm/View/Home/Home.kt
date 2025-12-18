@@ -1,5 +1,6 @@
 package wolf.north.parcelscannerapp.mvvm.View.Home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,19 +26,26 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import wolf.north.parcelscannerapp.mvvm.ViewModel.HomeViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = viewModel()
 ) {
 
-
+    //Home screen vals
+    //State from HomeUiState hoisted in screen
+    val state by viewModel.uiState
 
     Scaffold(
         topBar = {
@@ -100,7 +108,12 @@ fun HomeScreen(
                     Icon(
                         imageVector = Icons.Default.CameraAlt,
                         contentDescription = "Open scanner",
-                        modifier = Modifier.size(96.dp)
+                        modifier = Modifier
+                            .size(96.dp)
+                            .clickable(enabled = state.selectedScanType != null) {
+
+                            },
+                        tint = if (state.selectedScanType != null) Color.Black else Color.Gray
                     )
                 }
             }
