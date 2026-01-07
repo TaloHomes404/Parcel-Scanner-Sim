@@ -27,12 +27,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import wolf.north.parcelscannerapp.comps.scanners.PackageScannerScreen
 import wolf.north.parcelscannerapp.mvvm.ViewModel.HomeViewModel
 
 
@@ -46,6 +50,13 @@ fun HomeScreen(
     //Home screen vals
     //State from HomeUiState hoisted in screen
     val state by viewModel.uiState
+    var showScanner by remember { mutableStateOf(false) }
+
+    if(showScanner) {
+        PackageScannerScreen()
+        return
+    }
+
 
     Scaffold(
         topBar = {
@@ -95,10 +106,10 @@ fun HomeScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        Button(onClick = { }) {
+                        Button(onClick = { viewModel.onPackageSelected() }) {
                             Text("Package")
                         }
-                        Button(onClick = { }) {
+                        Button(onClick = { viewModel.onFormSelected() }) {
                             Text("Form")
                         }
                     }
@@ -111,7 +122,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .size(96.dp)
                             .clickable(enabled = state.selectedScanType != null) {
-
+                                showScanner = true
                             },
                         tint = if (state.selectedScanType != null) Color.Black else Color.Gray
                     )

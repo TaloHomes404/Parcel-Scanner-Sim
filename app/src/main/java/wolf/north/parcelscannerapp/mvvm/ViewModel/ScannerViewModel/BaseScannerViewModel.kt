@@ -33,4 +33,14 @@ open class BaseScannerViewModel : ViewModel(){
         )
     }
 
+    fun onDismissResult(){
+        _uiState.value = _uiState.value.copy(scanResult = null)
+    }
+
+    fun onRetry(){
+        _uiState.value = ScannerUiState()
+    }
+
+
+
 }
