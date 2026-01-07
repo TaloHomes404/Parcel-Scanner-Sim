@@ -1,33 +1,14 @@
 package wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-
-class PackageScannerViewModel : ViewModel(){
-
-    //vals
-
-    //UI state hoisting in viewmodel vals
-    private val _uiState = mutableStateOf(PackageScannerUiState())
-    val uiState: State<PackageScannerUiState> = _uiState
+class PackageScannerViewModel : BaseScannerViewModel() {
 
 
+    //
     //Methods for package scanner
+    //
 
-    //Capture button functionality
-    //UI state changes
-    fun onCaptureClicked(){
-        _uiState.value = _uiState.value.copy(isProcessing = true)
-        //TODO: ML kit włączanie aparatu
-    }
-
-    fun onProcessingFinished(result: String){
-        _uiState.value = _uiState.value.copy(
-            isProcessing = false,
-            scanResult = result
-        )
+    fun processPackage(result: String){
+        onProcessingFinished(result)
     }
 
 }
