@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import wolf.north.parcelscannerapp.comps.scanners.FormScannerScreen
 import wolf.north.parcelscannerapp.comps.scanners.PackageScannerScreen
 import wolf.north.parcelscannerapp.mvvm.ViewModel.HomeViewModel
 
@@ -50,10 +51,16 @@ fun HomeScreen(
     //Home screen vals
     //State from HomeUiState hoisted in screen
     val state by viewModel.uiState
+
+    //State value for scanner visibility
     var showScanner by remember { mutableStateOf(false) }
 
     if(showScanner) {
-        PackageScannerScreen()
+        when(state.selectedScanType) {
+            ScanType.FORM -> FormScannerScreen()
+            ScanType.PACKAGE -> PackageScannerScreen()
+            else -> PackageScannerScreen()
+        }
         return
     }
 

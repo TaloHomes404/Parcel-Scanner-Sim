@@ -44,7 +44,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel.BaseScannerViewModel
 import wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel.PackageScannerViewModel
 import java.io.File
 import java.util.concurrent.Executors
@@ -133,13 +132,13 @@ fun PackageScannerScreen(
             factory = { previewView }
         )
 
-        ScannerOverlay(
+        PackageScannerOverlay(
             modifier = Modifier.matchParentSize(),
             isProcessing = state.isProcessing,
             onCapture = {
                 val ic = imageCapture ?: run {
                     Log.w("PackageScanner", "ImageCapture not ready")
-                    return@ScannerOverlay
+                    return@PackageScannerOverlay
                 }
 
                 val photoFile = File(context.cacheDir, "scan_${System.currentTimeMillis()}.jpg")

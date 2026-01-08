@@ -19,10 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel.ScannerUiState
 
 @Composable
-fun ScannerOverlay(
+fun PackageScannerOverlay(
     modifier: Modifier = Modifier,
     isProcessing: Boolean,
     onCapture: () -> Unit
@@ -58,7 +57,7 @@ fun ScannerOverlay(
             },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 24.dp),
+                .padding(bottom = 100.dp),
             containerColor = if (isProcessing) Color.Gray else MaterialTheme.colorScheme.primary
         ) {
             if (isProcessing) {
@@ -69,6 +68,63 @@ fun ScannerOverlay(
                 )
             } else {
                 Icon(imageVector = Icons.Default.CameraAlt, contentDescription = "Capture")
+            }
+        }
+    }
+}
+
+@Composable
+fun FormScannerOverlay(
+    modifier: Modifier = Modifier,
+    isProcessing: Boolean,
+    onCapture: () -> Unit
+) {
+    Box(modifier = modifier.fillMaxSize()) {
+        //tint box for overlay
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(Color.Black.copy(alpha = 0.35f))
+        )
+
+        //Layout frame
+        Box(
+            modifier = Modifier
+                .size(width = 290.dp, height = 390.dp)
+                .align(Alignment.Center)
+                .border(2.dp, Color.Cyan, RoundedCornerShape(8.dp)) // ← inny kolor niż package
+                .background(Color.Transparent)
+        )
+
+        // Upper screen tip (can change)
+
+        Text(
+            text = "Dopasuj formularz do ramki",
+            color = Color.White,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 48.dp)
+        )
+
+        // capture button
+
+        FloatingActionButton(
+            onClick = {
+                if (!isProcessing) onCapture()
+            },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 100.dp),
+            containerColor = if (isProcessing) Color.Gray else MaterialTheme.colorScheme.primary
+        ) {
+            if (isProcessing) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = Color.White,
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Icon(imageVector = Icons.Default.CameraAlt, contentDescription = "Zrób zdjęcie")
             }
         }
     }
