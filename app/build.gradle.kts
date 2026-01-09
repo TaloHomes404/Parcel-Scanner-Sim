@@ -66,4 +66,9 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extensions)
+
+    //ML-Kit
+    implementation(libs.barcode.scanning)
+    implementation(libs.text.recognition)
+
 }
