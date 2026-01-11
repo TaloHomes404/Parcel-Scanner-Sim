@@ -71,4 +71,7 @@ dependencies {
     implementation(libs.barcode.scanning)
     implementation(libs.text.recognition)
 
+    //Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
+
 }
