@@ -1,4 +1,4 @@
-package wolf.north.parcelscannerapp.mvvm.Model.Files
+package wolf.north.parcelscannerapp.mvvm.Model.files
 
 //
 //Model class for scanner form

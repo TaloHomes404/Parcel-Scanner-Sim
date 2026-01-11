@@ -1,11 +1,11 @@
-package wolf.north.parcelscannerapp.mvvm.Model.Files
+package wolf.north.parcelscannerapp.mvvm.Model.files
 
 import java.time.LocalDate
 
 data class Package(
     val trackingNumber: String,
     val courier: Courier,
-    val scanDate: LocalDate,
+    val scanDate: String,
     val weightClass: WeightClass,
     val shipmentType: ShipmentType
 )
