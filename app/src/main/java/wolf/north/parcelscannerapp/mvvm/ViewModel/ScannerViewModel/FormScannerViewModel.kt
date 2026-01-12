@@ -2,30 +2,66 @@ package wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel
 
 import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.viewModelScope
 
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import wolf.north.parcelscannerapp.mvvm.Model.files.Form
 import java.io.File
 
-class FormScannerViewModel(private val context: Context) : BaseScannerViewModel(){
+class FormScannerViewModel() : BaseScannerViewModel(){
 
 
     //init vals for mlkit recognizer
     private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+
+    //Context val
+    private var appContext: Context? = null
 
 
     //
     //Methods for form scanner
     //
 
+    //INIT SCANNER
+    fun initScanner(context: Context) {
+        appContext = context.applicationContext
+    }
+
+    //Method for ml-kit recognizer to connect Screen
+    fun onImageCaptured(imageFile: File){
+        viewModelScope.launch {
+            try {
+                val scannedForm = withContext(Dispatchers.IO) {
+                    scanForm(imageFile)
+                }
+
+                if(scannedForm.getFilledFieldsCount() > 0){
+                    onProcessingFinished("SUCCESS: ${scannedForm.getFilledFieldsCount()} fields scanned")
+                } else {
+                    onProcessingFinished("ERROR: NO FORM FIELDS SCANNED")
+                }
+            }
+            catch (e : Exception){
+                onProcessingFinished("ERROR: ${e.message} IN FIELD SCAN")
+
+            }
+        }
+    }
+
     //**
     //ML-Kit Form Scanner methods
     //**
 
     suspend fun scanForm(imageFile: File) : Form {
+
+        val context = appContext ?: return Form()
+
         return try {
             val image = InputImage.fromFilePath(context, Uri.fromFile(imageFile))
             val visionText = recognizer.process(image).await()

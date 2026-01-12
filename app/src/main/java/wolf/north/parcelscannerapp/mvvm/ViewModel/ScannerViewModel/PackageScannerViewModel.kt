@@ -2,10 +2,14 @@ package wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel
 
 import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import wolf.north.parcelscannerapp.mvvm.Model.files.Courier
 import wolf.north.parcelscannerapp.mvvm.Model.files.ShipmentType
 import wolf.north.parcelscannerapp.mvvm.Model.files.WeightClass
@@ -15,16 +19,47 @@ import java.util.Calendar
 import java.util.Locale
 import wolf.north.parcelscannerapp.mvvm.Model.files.Package
 
-class PackageScannerViewModel(private val context : Context) : BaseScannerViewModel() {
+class PackageScannerViewModel : BaseScannerViewModel() {
 
     //init vals for recognizer
     private val scanner = BarcodeScanning.getClient()
+    //init vals for viewmodel
+    private var appContext: Context? = null
+
+    //INIT comp
+    fun initScanner(context: Context){
+        appContext = context.applicationContext
+    }
+
+    //Method connecting ml-kit scanner with screen
+    fun onImageCapture(imageFile: File) {
+        viewModelScope.launch {
+            try {
+                val scannedPackage = withContext(Dispatchers.IO){
+                    scanPackage(imageFile)
+                }
+
+                if (scannedPackage != null) {
+                    onProcessingFinished("SUCCESS")
+                } else {
+                    onProcessingFinished("ERROR: NO PACKAGE SCANNED")
+                }
+            }
+            catch (e : Exception){
+                e.printStackTrace()
+                onProcessingFinished("ERROR WITH EXCEPTION: ${e.message}")
+            }
+        }
+    }
 
 
     //**
     //ML-Kit Form Scanner methods
     //**
     suspend fun scanPackage(imageFile: File): Package? {
+
+        val context = appContext ?: return null
+
         return try {
             val image = InputImage.fromFilePath(context, Uri.fromFile(imageFile))
             val barcodes = scanner.process(image).await()

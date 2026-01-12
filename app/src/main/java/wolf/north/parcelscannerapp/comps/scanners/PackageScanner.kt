@@ -151,6 +151,7 @@ fun PackageScannerScreen(
                     cameraExecutor,
                     object : ImageCapture.OnImageSavedCallback {
                         override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                            viewModel.onImageCapture(photoFile)
                             val savedUri = Uri.fromFile(photoFile)
                             viewModel.onProcessingFinished(savedUri.toString())
                         }

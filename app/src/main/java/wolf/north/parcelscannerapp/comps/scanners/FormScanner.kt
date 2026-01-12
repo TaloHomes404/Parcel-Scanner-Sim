@@ -151,6 +151,7 @@ fun FormScannerScreen(
                     cameraExecutor,
                     object : ImageCapture.OnImageSavedCallback {
                         override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                            viewModel.onImageCaptured(photoFile)
                             val savedUri = Uri.fromFile(photoFile)
                             viewModel.onProcessingFinished(savedUri.toString())
                         }
