@@ -30,9 +30,9 @@ enum class ShipmentType(val displayName: String) {
 //
 enum class Courier(val displayName: String, val prefix: List<String>) {
 
-    INPOST("InPost", listOf("620", "630")),
+    INPOST("InPost", listOf("620", "630", "695", "632")),
     DHL("DHL", listOf("JJD", "JD")),
-    DPD("DPD", listOf("05")),
+    DPD("DPD", listOf("05", "103", "102")),
     UPS("UPS", listOf("1Z")),
     FEDEX("FedEx", listOf("96", "61")),
     POCZTA_POLSKA("Poczta Polska", listOf("RR", "CP")),

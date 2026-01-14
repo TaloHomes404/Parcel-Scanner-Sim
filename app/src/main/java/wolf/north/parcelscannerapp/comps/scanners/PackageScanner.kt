@@ -44,6 +44,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import wolf.north.parcelscannerapp.comps.PackageBottomBarResults
 import wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel.PackageScannerViewModel
 import java.io.File
 import java.util.concurrent.Executors
@@ -56,6 +57,11 @@ fun PackageScannerScreen(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.uiState
+
+    LaunchedEffect(Unit) {
+        viewModel.initScanner(context)
+    }
+
 
     var hasCameraPermission by remember {
         mutableStateOf(
@@ -83,6 +89,7 @@ fun PackageScannerScreen(
     var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
     val previewView = remember { PreviewView(context) }
 
+
     LaunchedEffect(hasCameraPermission) {
         if (!hasCameraPermission) return@LaunchedEffect
 
@@ -91,7 +98,7 @@ fun PackageScannerScreen(
 
         val preview = Preview.Builder().build()
         val ic = ImageCapture.Builder()
-            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
             .setTargetRotation(previewView.display.rotation)
             .build()
 
@@ -152,8 +159,6 @@ fun PackageScannerScreen(
                     object : ImageCapture.OnImageSavedCallback {
                         override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                             viewModel.onImageCapture(photoFile)
-                            val savedUri = Uri.fromFile(photoFile)
-                            viewModel.onProcessingFinished(savedUri.toString())
                         }
 
                         override fun onError(exception: ImageCaptureException) {
@@ -164,26 +169,15 @@ fun PackageScannerScreen(
             }
         )
 
-        if (state.scanResult != null) {
-            ModalBottomSheet(
-                onDismissRequest = { viewModel.onDismissResult() }
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Wynik skanu", style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = state.scanResult ?: "")
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Row {
-                        Button(onClick = { viewModel.onDismissResult() }) {
-                            Text("Zatwierdź")
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        OutlinedButton(onClick = { viewModel.onRetry() }) {
-                            Text("Skanuj ponownie")
-                        }
-                    }
-                }
-            }
+        state.scannedPackage?.let { packageData ->
+            PackageBottomBarResults(
+                packageData = packageData,
+                onDismiss = { viewModel.onDismissResult() },
+                onSave = { /* TODO */ },
+                onShare = { /* TODO */ },
+                onRescan = { viewModel.onRetry() }
+            )
         }
+
     }
 }

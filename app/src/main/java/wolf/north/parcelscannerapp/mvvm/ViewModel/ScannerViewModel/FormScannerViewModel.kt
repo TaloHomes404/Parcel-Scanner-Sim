@@ -42,9 +42,17 @@ class FormScannerViewModel() : BaseScannerViewModel(){
                 }
 
                 if(scannedForm.getFilledFieldsCount() > 0){
-                    onProcessingFinished("SUCCESS: ${scannedForm.getFilledFieldsCount()} fields scanned")
+                    _uiState.value = _uiState.value.copy(
+                        isProcessing = false,
+                        scannedForm = scannedForm,
+                        scanResult = "SUCCESS: ${scannedForm.getFilledFieldsCount()} pól"
+                    )
                 } else {
-                    onProcessingFinished("ERROR: NO FORM FIELDS SCANNED")
+                    _uiState.value = _uiState.value.copy(
+                        isProcessing = false,
+                        scannedForm = null,
+                        scanResult = "ERROR: No fields scanned"
+                    )
                 }
             }
             catch (e : Exception){

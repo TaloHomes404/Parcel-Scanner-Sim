@@ -11,7 +11,7 @@ open class BaseScannerViewModel : ViewModel(){
     //
 
     //UI state hoisting in viewmodel vals
-    private val _uiState = mutableStateOf(ScannerUiState())
+    protected val _uiState = mutableStateOf(ScannerUiState())
     val uiState: State<ScannerUiState> = _uiState
 
 
@@ -34,11 +34,15 @@ open class BaseScannerViewModel : ViewModel(){
     }
 
     fun onDismissResult(){
-        _uiState.value = _uiState.value.copy(scanResult = null)
+        _uiState.value = _uiState.value.copy(
+            scanResult = null,
+            scannedPackage = null,
+            scannedForm = null
+        )
     }
 
     fun onRetry(){
-        _uiState.value = ScannerUiState()
+        _uiState.value = ScannerUiState() //Reset on rescan
     }
 
 

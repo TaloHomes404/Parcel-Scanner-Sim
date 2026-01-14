@@ -40,14 +40,26 @@ class PackageScannerViewModel : BaseScannerViewModel() {
                 }
 
                 if (scannedPackage != null) {
-                    onProcessingFinished("SUCCESS")
+                    _uiState.value = _uiState.value.copy(
+                        isProcessing = false,
+                        scannedPackage = scannedPackage,
+                        scanResult = "SUCCESS"
+                    )
                 } else {
-                    onProcessingFinished("ERROR: NO PACKAGE SCANNED")
+                    _uiState.value = _uiState.value.copy(
+                        isProcessing = false,
+                        scannedPackage = null,
+                        scanResult = "ERROR: NO PACKAGE SCANNED"
+                    )
                 }
             }
             catch (e : Exception){
                 e.printStackTrace()
-                onProcessingFinished("ERROR WITH EXCEPTION: ${e.message}")
+                _uiState.value = _uiState.value.copy(
+                    isProcessing = false,
+                    scannedPackage = null,
+                    scanResult = "ERROR WITH EXCEPTION: ${e.message}"
+                )
             }
         }
     }

@@ -44,6 +44,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import wolf.north.parcelscannerapp.comps.FormBottomBarResults
 import wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel.FormScannerViewModel
 import java.io.File
 import java.util.concurrent.Executors
@@ -56,6 +57,11 @@ fun FormScannerScreen(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.uiState
+
+    LaunchedEffect(Unit) {
+        viewModel.initScanner(context)
+    }
+
 
     var hasCameraPermission by remember {
         mutableStateOf(
@@ -164,26 +170,14 @@ fun FormScannerScreen(
             }
         )
 
-        if (state.scanResult != null) {
-            ModalBottomSheet(
-                onDismissRequest = { viewModel.onDismissResult() }
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Wynik skanu", style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = state.scanResult ?: "")
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Row {
-                        Button(onClick = { viewModel.onDismissResult() }) {
-                            Text("Zatwierdź")
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        OutlinedButton(onClick = { viewModel.onRetry() }) {
-                            Text("Skanuj ponownie")
-                        }
-                    }
-                }
-            }
+        state.scannedForm?.let { formData ->
+            FormBottomBarResults(
+                form = formData,
+                onDismiss = { viewModel.onDismissResult() },
+                onSave = { /* TODO */ },
+                onShare = { /* TODO */ },
+                onEditAgain = { viewModel.onRetry() }
+            )
         }
     }
 }
