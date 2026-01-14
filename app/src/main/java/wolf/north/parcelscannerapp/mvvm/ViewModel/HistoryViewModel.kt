@@ -1,4 +1,6 @@
 package wolf.north.parcelscannerapp.mvvm.ViewModel
 
-class HistoryViewModel {
+import androidx.lifecycle.ViewModel
+
+class HistoryViewModel : ViewModel() {
 }
