@@ -58,7 +58,8 @@ import wolf.north.parcelscannerapp.mvvm.ViewModel.HistoryViewModel
 @Composable
 fun HistoryScreen(
     modifier: Modifier = Modifier,
-    viewModel: HistoryViewModel = viewModel()
+    viewModel: HistoryViewModel = viewModel(),
+    onGoToHome: () -> Unit
 ) {
 
     //Vals for History screen
@@ -77,7 +78,7 @@ fun HistoryScreen(
             NavigationBar {
                 NavigationBarItem(
                     selected = false,
-                    onClick = { },
+                    onClick = { viewModel.goHomeClicked { onGoToHome } },
                     icon = { Icon(Icons.Default.Home, contentDescription = null) }
                 )
                 NavigationBarItem(
@@ -207,7 +208,9 @@ fun HistoryScreen(
 @Preview
 @Composable
 private fun HistoryScreenPreview() {
-    HistoryScreen()
+    HistoryScreen(
+        onGoToHome = {  }
+    )
 }
 
 @Composable

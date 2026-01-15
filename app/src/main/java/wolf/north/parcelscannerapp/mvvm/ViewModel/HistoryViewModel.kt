@@ -60,4 +60,14 @@ class HistoryViewModel : ViewModel() {
         dismissDetails()
     }
 
+    //**
+    // Navigation
+    //**
+
+    fun goHomeClicked(
+        navigate: () -> Unit
+    ){
+        navigate()
+    }
+
 }

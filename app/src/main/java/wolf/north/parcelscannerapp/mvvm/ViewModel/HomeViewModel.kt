@@ -37,5 +37,12 @@ class HomeViewModel : ViewModel(){
         //TODO: scanner type select -> run scanner
     }
 
-
+    //**
+    //Navigation
+    //**
+    fun onHistoryClicked(
+        navigate: () -> Unit
+    ){
+        navigate()
+    }
 }
