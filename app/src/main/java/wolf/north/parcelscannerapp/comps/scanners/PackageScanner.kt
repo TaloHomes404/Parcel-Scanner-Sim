@@ -3,6 +3,7 @@ package wolf.north.parcelscannerapp.comps.scanners
 import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -46,7 +47,8 @@ import java.util.concurrent.Executors
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PackageScannerScreen(
-    viewModel: PackageScannerViewModel = viewModel()
+    viewModel: PackageScannerViewModel = viewModel(),
+    onNavigateBack: () -> Unit = {  }
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -56,6 +58,9 @@ fun PackageScannerScreen(
         viewModel.initScanner(context)
     }
 
+    BackHandler {
+        onNavigateBack()
+    }
 
     var hasCameraPermission by remember {
         mutableStateOf(
@@ -170,6 +175,7 @@ fun PackageScannerScreen(
                 onSave = {
                     ScanRepository.addPackage(packageData)
                     viewModel.onDismissResult()
+                    onNavigateBack()
                 },
                 onShare = { /* TODO */ },
                 onRescan = { viewModel.onRetry() }

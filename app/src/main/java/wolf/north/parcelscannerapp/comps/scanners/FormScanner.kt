@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -53,7 +54,8 @@ import java.util.concurrent.Executors
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormScannerScreen(
-    viewModel: FormScannerViewModel = viewModel()
+    viewModel: FormScannerViewModel = viewModel(),
+    onNavigateBack: () -> Unit = {  }
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -63,6 +65,9 @@ fun FormScannerScreen(
         viewModel.initScanner(context)
     }
 
+    BackHandler {
+        onNavigateBack()
+    }
 
     var hasCameraPermission by remember {
         mutableStateOf(
@@ -177,8 +182,8 @@ fun FormScannerScreen(
                 onDismiss = { viewModel.onDismissResult() },
                 onSave = {
                     ScanRepository.addForm(formData)
-                         viewModel.onDismissResult()
-                         },
+                    viewModel.onDismissResult()
+                    onNavigateBack() },
                 onShare = { /* TODO */ },
                 onEditAgain = { viewModel.onRetry() }
             )

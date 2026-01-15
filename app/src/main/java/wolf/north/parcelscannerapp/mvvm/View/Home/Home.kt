@@ -64,9 +64,15 @@ fun HomeScreen(
 
     if(showScanner) {
         when(state.selectedScanType) {
-            ScanType.FORM -> FormScannerScreen()
-            ScanType.PACKAGE -> PackageScannerScreen()
-            else -> PackageScannerScreen()
+            ScanType.FORM -> FormScannerScreen(
+                onNavigateBack = { showScanner = false }
+            )
+            ScanType.PACKAGE -> PackageScannerScreen(
+                onNavigateBack = { showScanner = false }
+            )
+            else -> PackageScannerScreen(
+                onNavigateBack = { showScanner = false }
+            )
         }
         return
     }
