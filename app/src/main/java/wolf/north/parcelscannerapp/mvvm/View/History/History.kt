@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -37,6 +39,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +48,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import wolf.north.parcelscannerapp.comps.FormBottomBarResults
+import wolf.north.parcelscannerapp.comps.PackageBottomBarResults
 import wolf.north.parcelscannerapp.mvvm.Model.files.Form
 import wolf.north.parcelscannerapp.mvvm.Model.files.Package
 import wolf.north.parcelscannerapp.mvvm.ViewModel.HistoryViewModel
@@ -54,6 +60,11 @@ fun HistoryScreen(
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = viewModel()
 ) {
+
+    //Vals for History screen
+    val packages by viewModel.packages.collectAsState()
+    val forms by viewModel.forms.collectAsState()
+    val state by viewModel.uiState
 
 
     Scaffold(
@@ -89,9 +100,109 @@ fun HistoryScreen(
           .padding(16.dp)
       ) {
 
+          LazyColumn(
+              modifier = modifier
+                  .fillMaxSize()
+                  .padding(paddingValues),
+              contentPadding = PaddingValues(vertical = 8.dp)
+          ){
+
+              //Packages list as items in lazy column
+          if (packages.isNotEmpty()) {
+              item {
+                  Text(
+                      text = "Packages (${packages.size})",
+                      style = MaterialTheme.typography.titleMedium,
+                      modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                  )
+              }
+
+              items(packages) { packageData ->
+                  ScanParcelItem(
+                      packageData = packageData,
+                      onViewDetails = {
+                          viewModel.showPackageDetails(packageData)
+                      },
+                      onShare = { /* TODO */ }
+                  )
+              }
+          }
+
+                //Forms list as items in lazy column
+              if (forms.isNotEmpty()) {
+                  item {
+                      Text(
+                          text = "Forms (${forms.size})",
+                          style = MaterialTheme.typography.titleMedium,
+                          modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                      )
+                  }
+
+                  items(forms) { formData ->
+                      ScanFormItem(
+                          formData = formData,
+                          onViewDetails = {
+                              viewModel.showFormDetails(formData)
+                          },
+                          onShare = { /* TODO */ }
+                      )
+                  }
+              }
+
+              //Empty list if both packages and form aren't scanned
+              if (packages.isEmpty() && forms.isEmpty()) {
+                  item {
+                      Column(
+                          modifier = Modifier
+                              .fillMaxWidth()
+                              .padding(32.dp),
+                          horizontalAlignment = Alignment.CenterHorizontally
+                      ) {
+                          Text(
+                              text = "Scans history empty!",
+                              style = MaterialTheme.typography.bodyLarge,
+                              color = MaterialTheme.colorScheme.onSurfaceVariant
+                          )
+                          Spacer(modifier = Modifier.height(8.dp))
+                          Text(
+                              text = "Do a scan to show something there!",
+                              style = MaterialTheme.typography.bodySmall,
+                              color = MaterialTheme.colorScheme.onSurfaceVariant
+                          )
+                      }
+                  }
+              }
+          }
+
+          state.selectedPackage?.let { packageData ->
+              PackageBottomBarResults(
+                  packageData = packageData,
+                  onDismiss = { viewModel.dismissDetails() },
+                  onSave = {},
+                  onShare = { /* TODO */ },
+                  onRescan = {
+                      viewModel.deletePackage(packageData)
+                  }
+              )
+          }
+
+          state.selectedForm?.let { formData ->
+              FormBottomBarResults(
+                  form = formData,
+                  onDismiss = { viewModel.dismissDetails() },
+                  onSave = {},
+                  onShare = { /* TODO */ },
+                  onEditAgain = {
+                      viewModel.deleteForm(formData)
+                  }
+              )
+          }
+
+
+          }
       }
     }
-}
+
 
 @Preview
 @Composable

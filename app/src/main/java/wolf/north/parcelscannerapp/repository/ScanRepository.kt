@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import wolf.north.parcelscannerapp.mvvm.Model.files.Form
+import wolf.north.parcelscannerapp.mvvm.Model.files.Package
 
 
 //Singleton - single instance for whole app (for MVP - testing purposes

@@ -46,6 +46,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import wolf.north.parcelscannerapp.comps.FormBottomBarResults
 import wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel.FormScannerViewModel
+import wolf.north.parcelscannerapp.repository.ScanRepository
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -174,7 +175,10 @@ fun FormScannerScreen(
             FormBottomBarResults(
                 form = formData,
                 onDismiss = { viewModel.onDismissResult() },
-                onSave = { /* TODO */ },
+                onSave = {
+                    ScanRepository.addForm(formData)
+                         viewModel.onDismissResult()
+                         },
                 onShare = { /* TODO */ },
                 onEditAgain = { viewModel.onRetry() }
             )

@@ -2,7 +2,6 @@ package wolf.north.parcelscannerapp.comps.scanners
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,17 +15,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -46,6 +39,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import wolf.north.parcelscannerapp.comps.PackageBottomBarResults
 import wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel.PackageScannerViewModel
+import wolf.north.parcelscannerapp.repository.ScanRepository
 import java.io.File
 import java.util.concurrent.Executors
 
@@ -173,7 +167,10 @@ fun PackageScannerScreen(
             PackageBottomBarResults(
                 packageData = packageData,
                 onDismiss = { viewModel.onDismissResult() },
-                onSave = { /* TODO */ },
+                onSave = {
+                    ScanRepository.addPackage(packageData)
+                    viewModel.onDismissResult()
+                },
                 onShare = { /* TODO */ },
                 onRescan = { viewModel.onRetry() }
             )
