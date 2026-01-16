@@ -22,7 +22,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ParcelScannerSimTheme {
-                HomeScreen()
+                val navController = rememberNavController() // Create instance of navigation controller
+                AppNavigation(navController = navController) // Set and use NavHost
             }
         }
     }
@@ -35,7 +36,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     ParcelScannerSimTheme {
-        val navController = rememberNavController() // Create instance of navigation controller
-        AppNavigation(navController = navController) // Set and use NavHost
+        // maybe don't create nav instance in preview next time XD (40 min saved)
     }
 }

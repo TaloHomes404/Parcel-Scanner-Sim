@@ -52,7 +52,7 @@ import wolf.north.parcelscannerapp.mvvm.ViewModel.HomeViewModel
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(),
-    onGoToHistory: () -> Unit
+    onGoToHistory: () -> Unit = {   }
 ) {
 
     //Home screen vals
@@ -93,7 +93,7 @@ fun HomeScreen(
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = { viewModel.onHistoryClicked { onGoToHistory }},
+                    onClick = { onGoToHistory() },
                     icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) }
                 )
                 NavigationBarItem(
