@@ -11,6 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import wolf.north.parcelscannerapp.mvvm.View.Home.HomeScreen
+import wolf.north.parcelscannerapp.navigation.AppNavigation
 import wolf.north.parcelscannerapp.ui.theme.ParcelScannerSimTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,15 +22,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ParcelScannerSimTheme {
-
+                val navController = rememberNavController() // Create instance of navigation controller
+                AppNavigation(navController = navController) // Set and use NavHost
             }
         }
     }
 }
+
+
+
+//Preview home screen
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     ParcelScannerSimTheme {
-
+        // maybe don't create nav instance in preview next time XD (40 min saved)
     }
 }

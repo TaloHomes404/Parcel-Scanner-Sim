@@ -47,7 +47,10 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.material3)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -56,4 +59,21 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // CameraX
+    implementation(libs.androidx.camera.core)
+    implementation(libs.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.extensions)
+
+    //ML-Kit
+    implementation(libs.barcode.scanning)
+    implementation(libs.text.recognition)
+
+    //Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
+
+    //Navigation
+    implementation(libs.androidx.navigation.compose)
 }
