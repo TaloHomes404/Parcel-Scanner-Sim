@@ -49,10 +49,9 @@ import wolf.north.parcelscannerapp.mvvm.ViewModel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun HomeScreenContent(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(),
-    onGoToHistory: () -> Unit = {   }
 ) {
 
     //Home screen vals
@@ -77,38 +76,10 @@ fun HomeScreen(
         return
     }
 
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Parcel Scanner") }
-            )
-        },
-        bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { },
-                    icon = { Icon(Icons.Default.Home, contentDescription = null) }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { onGoToHistory() },
-                    icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { },
-                    icon = { Icon(Icons.Default.Person, contentDescription = null) }
-                )
-            }
-        }
-    ) { paddingValues ->
-
+    //Home screen content
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(paddingValues)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
@@ -165,12 +136,12 @@ fun HomeScreen(
             }
         }
     }
-}
+
 
 @Preview
 @Composable
-private fun HomeScreenPreview() {
-    HomeScreen( onGoToHistory = { null } )
+private fun HomeScreenContentPreview() {
+    HomeScreenContent(  )
 }
 
 @Composable

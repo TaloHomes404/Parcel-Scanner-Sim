@@ -56,10 +56,9 @@ import wolf.north.parcelscannerapp.mvvm.ViewModel.HistoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryScreen(
+fun HistoryScreenContent(
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = viewModel(),
-    onGoToHome: () -> Unit = {  }
 ) {
 
     //Vals for History screen
@@ -68,43 +67,15 @@ fun HistoryScreen(
     val state by viewModel.uiState
 
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "History of scans") }
-            )
-        },
-        bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = false,
-                    onClick = {  onGoToHome()  },
-                    icon = { Icon(Icons.Default.Home, contentDescription = null) }
-                )
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { },
-                    icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { },
-                    icon = { Icon(Icons.Default.Person, contentDescription = null) }
-                )
-            }
-        }
-    ) { paddingValues ->
-
+    //History screen content
       Column(modifier = Modifier
           .fillMaxSize()
-          .padding(paddingValues)
           .padding(16.dp)
       ) {
 
           LazyColumn(
               modifier = modifier
-                  .fillMaxSize()
-                  .padding(paddingValues),
+                  .fillMaxSize(),
               contentPadding = PaddingValues(vertical = 8.dp)
           ){
 
@@ -202,14 +173,13 @@ fun HistoryScreen(
 
           }
       }
-    }
+
 
 
 @Preview
 @Composable
 private fun HistoryScreenPreview() {
-    HistoryScreen(
-    )
+    HistoryScreenContent()
 }
 
 @Composable
