@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import wolf.north.parcelscannerapp.mvvm.View.History.HistoryScreen
-import wolf.north.parcelscannerapp.mvvm.View.Home.HomeScreen
+import wolf.north.parcelscannerapp.mvvm.View.History.HistoryScreenContent
+import wolf.north.parcelscannerapp.mvvm.View.Home.HomeScreenContent
 import wolf.north.parcelscannerapp.ui.AppScaffold
 
 @Composable
