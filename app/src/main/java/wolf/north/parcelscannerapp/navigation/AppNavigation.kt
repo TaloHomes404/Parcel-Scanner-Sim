@@ -2,6 +2,9 @@ package wolf.north.parcelscannerapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +21,8 @@ fun AppNavigation(navController: NavHostController) {
     //**
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    var hideBars by remember { mutableStateOf(false)
+    }
 
     AppScaffold(
         title = when (currentRoute) {
@@ -27,7 +32,8 @@ fun AppNavigation(navController: NavHostController) {
             else -> "Parcel Scanner"
         },
         currentRoute = currentRoute,
-        navController = navController
+        navController = navController,
+        showBars = !hideBars
     ) { paddingValues ->
         NavHost(
             navController = navController,
@@ -35,7 +41,7 @@ fun AppNavigation(navController: NavHostController) {
         ) {
             // Home content - loaded into composable scaffold
             composable(Screen.Home.route) {
-                HomeScreenContent()
+                HomeScreenContent(onScannerVisibilityChanged = {hideBars = it})
             }
 
             // History content - loaded into composable scaffold

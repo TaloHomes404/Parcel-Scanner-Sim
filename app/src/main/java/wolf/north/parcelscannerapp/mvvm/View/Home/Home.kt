@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,7 @@ import wolf.north.parcelscannerapp.mvvm.ViewModel.HomeViewModel
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(),
+    onScannerVisibilityChanged: (Boolean) -> Unit = {   }
 ) {
 
     //Home screen vals
@@ -60,6 +62,11 @@ fun HomeScreenContent(
 
     //State value for scanner visibility
     var showScanner by remember { mutableStateOf(false) }
+
+
+    LaunchedEffect(showScanner){
+        onScannerVisibilityChanged(showScanner)
+    }
 
     if(showScanner) {
         when(state.selectedScanType) {
@@ -141,7 +148,7 @@ fun HomeScreenContent(
 @Preview
 @Composable
 private fun HomeScreenContentPreview() {
-    HomeScreenContent(  )
+    HomeScreenContent()
 }
 
 @Composable
