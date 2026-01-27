@@ -1,10 +1,12 @@
 package wolf.north.parcelscannerapp.navigation
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -37,7 +39,9 @@ fun AppNavigation(navController: NavHostController) {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route // Start from Home Screen
+            startDestination = Screen.Home.route, // Start from Home Screen
+            modifier = Modifier.padding(paddingValues)
+
         ) {
             // Home content - loaded into composable scaffold
             composable(Screen.Home.route) {

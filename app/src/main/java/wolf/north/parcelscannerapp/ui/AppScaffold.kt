@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -51,6 +54,10 @@ fun AppScaffold(
     showBars: Boolean = true,
     content: @Composable (PaddingValues) -> Unit
 ) {
+
+    //Material theme val for color scheme
+    val colorScheme = MaterialTheme.colorScheme
+
     Scaffold(
         topBar = {
             if (showBars) {
@@ -63,13 +70,14 @@ fun AppScaffold(
                             Text(
                                 text = title,
                                 style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.SemiBold
+                                fontWeight = FontWeight.SemiBold,
+                                color = colorScheme.onSurface
                             )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        titleContentColor = MaterialTheme.colorScheme.onSurface
+                        containerColor = colorScheme.surface,
+                        titleContentColor = colorScheme.onSurface,
                     )
                 )
             }
@@ -77,12 +85,17 @@ fun AppScaffold(
         bottomBar = {
             if (showBars) {
                 Box(
-                    modifier = Modifier.padding(16.dp),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding()
+                        .padding(horizontal = 24.dp, vertical = 12.dp),
+                    contentAlignment = Alignment.BottomCenter
                 ) {
                     NavigationBar(
-                        modifier = Modifier.clip(RoundedCornerShape(30.dp)),
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                        modifier = Modifier
+                            .height(64.dp)
+                            .clip(RoundedCornerShape(32.dp)),
+                        containerColor = colorScheme.surfaceContainer,
                         tonalElevation = 3.dp
                     ) {
                         // Home
@@ -103,7 +116,7 @@ fun AppScaffold(
                                     Icon(
                                         Icons.Default.Home,
                                         contentDescription = "Home",
-                                        modifier = Modifier.size(24.dp)
+                                        modifier = Modifier.size(22.dp)
                                     )
                                     // Animated text near bottom bar icons
                                     AnimatedVisibility(
@@ -122,10 +135,10 @@ fun AppScaffold(
                                         exit = fadeOut() + shrinkHorizontally()
                                     ) {
                                         Row {
-                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Spacer(modifier = Modifier.width(6.dp))
                                             Text(
                                                 "Home",
-                                                style = MaterialTheme.typography.labelLarge,
+                                                style = MaterialTheme.typography.labelMedium,
                                                 fontWeight = FontWeight.Medium
                                             )
                                         }
@@ -134,10 +147,10 @@ fun AppScaffold(
                             },
                             label = null,
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                selectedIconColor = colorScheme.onPrimaryContainer,
+                                selectedTextColor = colorScheme.onPrimaryContainer,
+                                indicatorColor = colorScheme.primaryContainer,
+                                unselectedIconColor = colorScheme.onSurfaceVariant
                             )
                         )
 
@@ -159,7 +172,7 @@ fun AppScaffold(
                                     Icon(
                                         Icons.AutoMirrored.Filled.List,
                                         contentDescription = "History",
-                                        modifier = Modifier.size(24.dp)
+                                        modifier = Modifier.size(22.dp)
                                     )
                                     AnimatedVisibility(
                                         visible = currentRoute == Screen.History.route,
@@ -177,10 +190,10 @@ fun AppScaffold(
                                         exit = fadeOut() + shrinkHorizontally()
                                     ) {
                                         Row {
-                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Spacer(modifier = Modifier.width(6.dp))
                                             Text(
                                                 "History",
-                                                style = MaterialTheme.typography.labelLarge,
+                                                style = MaterialTheme.typography.labelMedium,
                                                 fontWeight = FontWeight.Medium
                                             )
                                         }
@@ -189,10 +202,10 @@ fun AppScaffold(
                             },
                             label = null,
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                selectedIconColor = colorScheme.onPrimaryContainer,
+                                selectedTextColor = colorScheme.onPrimaryContainer,
+                                indicatorColor = colorScheme.primaryContainer,
+                                unselectedIconColor = colorScheme.onSurfaceVariant
                             )
                         )
 
@@ -214,7 +227,7 @@ fun AppScaffold(
                                     Icon(
                                         Icons.Default.Person,
                                         contentDescription = "Profile",
-                                        modifier = Modifier.size(24.dp)
+                                        modifier = Modifier.size(22.dp)
                                     )
                                     AnimatedVisibility(
                                         visible = currentRoute == Screen.Profile.route,
@@ -232,10 +245,10 @@ fun AppScaffold(
                                         exit = fadeOut() + shrinkHorizontally()
                                     ) {
                                         Row {
-                                            Spacer(modifier = Modifier.width(8.dp))
+                                            Spacer(modifier = Modifier.width(6.dp))
                                             Text(
                                                 "Profile",
-                                                style = MaterialTheme.typography.labelLarge,
+                                                style = MaterialTheme.typography.labelMedium,
                                                 fontWeight = FontWeight.Medium
                                             )
                                         }
@@ -244,16 +257,17 @@ fun AppScaffold(
                             },
                             label = null,
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                selectedIconColor = colorScheme.onPrimaryContainer,
+                                selectedTextColor = colorScheme.onPrimaryContainer,
+                                indicatorColor = colorScheme.primaryContainer,
+                                unselectedIconColor = colorScheme.onSurfaceVariant
                             )
                         )
                     }
                 }
             }
         }
+
     ) { paddingValues ->
         content(paddingValues)
     }

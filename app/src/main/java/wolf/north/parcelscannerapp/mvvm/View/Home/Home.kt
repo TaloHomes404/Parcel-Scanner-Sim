@@ -63,6 +63,8 @@ fun HomeScreenContent(
     //State value for scanner visibility
     var showScanner by remember { mutableStateOf(false) }
 
+    //Material Theme val
+    val colorScheme = MaterialTheme.colorScheme
 
     LaunchedEffect(showScanner){
         onScannerVisibilityChanged(showScanner)
@@ -127,7 +129,7 @@ fun HomeScreenContent(
 
                     Text("Click to capture",
                         fontSize = 24.sp,
-                        color = if (state.selectedScanType != null) Color.Black else Color.Gray)
+                        color = if (state.selectedScanType != null) colorScheme.onSurface else colorScheme.onSurface.copy(alpha = 0.6f))
                     Spacer(modifier = Modifier.height(4.dp))
                     Icon(
                         imageVector = Icons.Default.CameraAlt,
@@ -137,7 +139,7 @@ fun HomeScreenContent(
                             .clickable(enabled = state.selectedScanType != null) {
                                 showScanner = true
                             },
-                        tint = if (state.selectedScanType != null) Color.Black else Color.Gray
+                        tint = if (state.selectedScanType != null) colorScheme.primary else colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
             }

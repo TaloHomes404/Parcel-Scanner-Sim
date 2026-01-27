@@ -26,27 +26,32 @@ fun PackageScannerOverlay(
     isProcessing: Boolean,
     onCapture: () -> Unit
 ) {
+
+    //Material theme value
+    val colorScheme = MaterialTheme.colorScheme
+
     Box(modifier = modifier.fillMaxSize()) {
         //tint box for overlay
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(Color.Black.copy(alpha = 0.35f))
+                .background(colorScheme.scrim.copy(alpha = 0.35f))
         )
 
         //Layout frame
         Box(
             modifier = Modifier
-                .size(width = 280.dp, height = 160.dp)
+                .size(width = 290.dp, height = 180.dp)
                 .align(Alignment.Center)
-                .border(2.dp, Color.Green, RoundedCornerShape(8.dp))
+                .border(2.dp, colorScheme.primary, RoundedCornerShape(8.dp))
                 .background(Color.Transparent)
         )
 
         // Upper screen tip (can change)
         Text(
             text = "Wyrównaj etykietę w ramce i naciśnij Skanuj",
-            color = Color.White,
+            color = colorScheme.onPrimaryContainer,
+            style = MaterialTheme.typography.labelLarge,
             modifier = Modifier.align(Alignment.TopCenter).padding(top = 48.dp)
         )
 
@@ -58,16 +63,20 @@ fun PackageScannerOverlay(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 100.dp),
-            containerColor = if (isProcessing) Color.Gray else MaterialTheme.colorScheme.primary
+            containerColor = if (isProcessing) colorScheme.onSurface.copy(alpha = 0.12f) else colorScheme.primary
         ) {
             if (isProcessing) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
-                    color = Color.White,
+                    color = colorScheme.onPrimary,
                     strokeWidth = 2.dp
                 )
             } else {
-                Icon(imageVector = Icons.Default.CameraAlt, contentDescription = "Capture")
+                Icon(
+                    imageVector = Icons.Default.CameraAlt,
+                    contentDescription = "Capture",
+                    tint = colorScheme.onPrimary
+                )
             }
         }
     }
@@ -79,12 +88,15 @@ fun FormScannerOverlay(
     isProcessing: Boolean,
     onCapture: () -> Unit
 ) {
+
+    val colorScheme = MaterialTheme.colorScheme
+
     Box(modifier = modifier.fillMaxSize()) {
         //tint box for overlay
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(Color.Black.copy(alpha = 0.35f))
+                .background(colorScheme.scrim.copy(alpha = 0.35f))
         )
 
         //Layout frame
@@ -92,7 +104,7 @@ fun FormScannerOverlay(
             modifier = Modifier
                 .size(width = 290.dp, height = 390.dp)
                 .align(Alignment.Center)
-                .border(2.dp, Color.Cyan, RoundedCornerShape(8.dp)) // ← inny kolor niż package
+                .border(2.dp, color = colorScheme.tertiary, RoundedCornerShape(12.dp))
                 .background(Color.Transparent)
         )
 
@@ -100,7 +112,8 @@ fun FormScannerOverlay(
 
         Text(
             text = "Dopasuj formularz do ramki",
-            color = Color.White,
+            color = colorScheme.onTertiaryContainer,
+            style = MaterialTheme.typography.labelLarge,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 48.dp)
@@ -115,16 +128,20 @@ fun FormScannerOverlay(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 100.dp),
-            containerColor = if (isProcessing) Color.Gray else MaterialTheme.colorScheme.primary
+            containerColor = if (isProcessing) colorScheme.onSurface.copy(alpha = 0.12f) else colorScheme.primary
         ) {
             if (isProcessing) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
-                    color = Color.White,
+                    color = colorScheme.onPrimary,
                     strokeWidth = 2.dp
                 )
             } else {
-                Icon(imageVector = Icons.Default.CameraAlt, contentDescription = "Zrób zdjęcie")
+                Icon(
+                    imageVector = Icons.Default.CameraAlt,
+                    contentDescription = "Zrób zdjęcie",
+                    tint = colorScheme.onPrimary
+                )
             }
         }
     }
