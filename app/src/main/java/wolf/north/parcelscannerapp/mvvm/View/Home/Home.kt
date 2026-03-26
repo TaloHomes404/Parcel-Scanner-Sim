@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,10 +50,10 @@ import wolf.north.parcelscannerapp.mvvm.ViewModel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun HomeScreenContent(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(),
-    onGoToHistory: () -> Unit = {   }
+    onScannerVisibilityChanged: (Boolean) -> Unit = {   }
 ) {
 
     //Home screen vals
@@ -61,6 +62,13 @@ fun HomeScreen(
 
     //State value for scanner visibility
     var showScanner by remember { mutableStateOf(false) }
+
+    //Material Theme val
+    val colorScheme = MaterialTheme.colorScheme
+
+    LaunchedEffect(showScanner){
+        onScannerVisibilityChanged(showScanner)
+    }
 
     if(showScanner) {
         when(state.selectedScanType) {
@@ -77,38 +85,10 @@ fun HomeScreen(
         return
     }
 
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Parcel Scanner") }
-            )
-        },
-        bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { },
-                    icon = { Icon(Icons.Default.Home, contentDescription = null) }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { onGoToHistory() },
-                    icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { },
-                    icon = { Icon(Icons.Default.Person, contentDescription = null) }
-                )
-            }
-        }
-    ) { paddingValues ->
-
+    //Home screen content
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(paddingValues)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
@@ -149,7 +129,7 @@ fun HomeScreen(
 
                     Text("Click to capture",
                         fontSize = 24.sp,
-                        color = if (state.selectedScanType != null) Color.Black else Color.Gray)
+                        color = if (state.selectedScanType != null) colorScheme.onSurface else colorScheme.onSurface.copy(alpha = 0.6f))
                     Spacer(modifier = Modifier.height(4.dp))
                     Icon(
                         imageVector = Icons.Default.CameraAlt,
@@ -159,18 +139,18 @@ fun HomeScreen(
                             .clickable(enabled = state.selectedScanType != null) {
                                 showScanner = true
                             },
-                        tint = if (state.selectedScanType != null) Color.Black else Color.Gray
+                        tint = if (state.selectedScanType != null) colorScheme.primary else colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
             }
         }
     }
-}
+
 
 @Preview
 @Composable
-private fun HomeScreenPreview() {
-    HomeScreen( onGoToHistory = { null } )
+private fun HomeScreenContentPreview() {
+    HomeScreenContent()
 }
 
 @Composable
