@@ -22,6 +22,6 @@ CameraX
   <p align="center">
   <img src="app/src/main/java/wolf/north/parcelscannerapp/screenshots/testpwezkdepasss.PNG" width="22%" />
   <img src="app/src/main/java/wolf/north/parcelscannerapp/screenshots/parcelscannerscan2.PNG" width="22%" />
-  <img src="app/src/main/java/wolf/north/parcelscannerapp/screenshots/testpwezkdepasss.PNG" width="22%" />
+  <img src="app/src/main/java/wolf/north/parcelscannerapp/screenshots/parcelscannersacan1.PNG" width="22%" />
 </p>
 
