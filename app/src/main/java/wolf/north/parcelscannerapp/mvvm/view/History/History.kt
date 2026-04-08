@@ -1,6 +1,5 @@
-package wolf.north.parcelscannerapp.mvvm.View.History
+package wolf.north.parcelscannerapp.mvvm.view.History
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,9 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import wolf.north.parcelscannerapp.comps.FormBottomBarResults
 import wolf.north.parcelscannerapp.comps.PackageBottomBarResults
-import wolf.north.parcelscannerapp.mvvm.Model.files.Form
-import wolf.north.parcelscannerapp.mvvm.Model.files.Package
-import wolf.north.parcelscannerapp.mvvm.ViewModel.HistoryViewModel
+import wolf.north.parcelscannerapp.mvvm.model.files.Form
+import wolf.north.parcelscannerapp.mvvm.model.files.Package
+import wolf.north.parcelscannerapp.mvvm.viewmodel.HistoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

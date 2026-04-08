@@ -1,4 +1,4 @@
-package wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel
+package wolf.north.parcelscannerapp.mvvm.viewmodel.scannerviewmodel
 
 import android.content.Context
 import android.net.Uri
@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import wolf.north.parcelscannerapp.mvvm.Model.files.Form
+import wolf.north.parcelscannerapp.mvvm.model.files.Form
 import java.io.File
 
 class FormScannerViewModel() : BaseScannerViewModel(){

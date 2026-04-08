@@ -22,8 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import wolf.north.parcelscannerapp.mvvm.Model.files.Form
-import wolf.north.parcelscannerapp.mvvm.Model.files.Package
+import wolf.north.parcelscannerapp.mvvm.model.files.Form
+import wolf.north.parcelscannerapp.mvvm.model.files.Package
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

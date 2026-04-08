@@ -1,12 +1,12 @@
-package wolf.north.parcelscannerapp.mvvm.ViewModel
+package wolf.north.parcelscannerapp.mvvm.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import wolf.north.parcelscannerapp.mvvm.Model.files.Form
-import wolf.north.parcelscannerapp.mvvm.Model.files.Package
+import wolf.north.parcelscannerapp.mvvm.model.files.Form
+import wolf.north.parcelscannerapp.mvvm.model.files.Package
 import wolf.north.parcelscannerapp.repository.ScanRepository
 
 data class HistoryUiState(

@@ -1,4 +1,4 @@
-package wolf.north.parcelscannerapp.mvvm.View.Home
+package wolf.north.parcelscannerapp.mvvm.view.Home
 
 data class HomeUiState (
     val selectedScanType: ScanType? = null

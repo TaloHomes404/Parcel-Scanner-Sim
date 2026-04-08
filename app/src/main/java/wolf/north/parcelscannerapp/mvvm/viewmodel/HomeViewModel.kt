@@ -1,10 +1,10 @@
-package wolf.north.parcelscannerapp.mvvm.ViewModel
+package wolf.north.parcelscannerapp.mvvm.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import wolf.north.parcelscannerapp.mvvm.View.Home.HomeUiState
-import wolf.north.parcelscannerapp.mvvm.View.Home.ScanType
+import wolf.north.parcelscannerapp.mvvm.view.Home.HomeUiState
+import wolf.north.parcelscannerapp.mvvm.view.Home.ScanType
 
 class HomeViewModel : ViewModel(){
 
