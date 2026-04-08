@@ -3,11 +3,11 @@ package wolf.north.parcelscannerapp.repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import wolf.north.parcelscannerapp.mvvm.Model.files.Form
-import wolf.north.parcelscannerapp.mvvm.Model.files.Package
+import wolf.north.parcelscannerapp.mvvm.model.files.Form
+import wolf.north.parcelscannerapp.mvvm.model.files.Package
 
 
-//Singleton - single instance for whole app (for MVP - testing purposes
+//Singleton - single instance for whole app (for MVP - testing purposes)
 object ScanRepository {
 
     //List of packages
