@@ -1,6 +1,4 @@
-package wolf.north.parcelscannerapp.mvvm.Model.files
-
-import java.time.LocalDate
+package wolf.north.parcelscannerapp.mvvm.model.files
 
 data class Package(
     val trackingNumber: String,

@@ -39,7 +39,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import wolf.north.parcelscannerapp.comps.PackageBottomBarResults
-import wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel.PackageScannerViewModel
+import wolf.north.parcelscannerapp.mvvm.viewmodel.scannerviewmodel.PackageScannerViewModel
 import wolf.north.parcelscannerapp.repository.ScanRepository
 import java.io.File
 import java.util.concurrent.Executors

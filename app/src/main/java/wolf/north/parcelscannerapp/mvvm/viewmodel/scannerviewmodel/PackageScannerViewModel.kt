@@ -1,4 +1,4 @@
-package wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel
+package wolf.north.parcelscannerapp.mvvm.viewmodel.scannerviewmodel
 
 import android.content.Context
 import android.net.Uri
@@ -10,14 +10,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import wolf.north.parcelscannerapp.mvvm.Model.files.Courier
-import wolf.north.parcelscannerapp.mvvm.Model.files.ShipmentType
-import wolf.north.parcelscannerapp.mvvm.Model.files.WeightClass
+import wolf.north.parcelscannerapp.mvvm.model.files.Courier
+import wolf.north.parcelscannerapp.mvvm.model.files.ShipmentType
+import wolf.north.parcelscannerapp.mvvm.model.files.WeightClass
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import wolf.north.parcelscannerapp.mvvm.Model.files.Package
+import wolf.north.parcelscannerapp.mvvm.model.files.Package
 
 class PackageScannerViewModel : BaseScannerViewModel() {
 

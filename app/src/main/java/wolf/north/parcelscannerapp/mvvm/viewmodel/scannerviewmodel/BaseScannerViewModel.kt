@@ -1,4 +1,4 @@
-package wolf.north.parcelscannerapp.mvvm.ViewModel.ScannerViewModel
+package wolf.north.parcelscannerapp.mvvm.viewmodel.scannerviewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
