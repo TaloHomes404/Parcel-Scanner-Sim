@@ -1,4 +1,4 @@
-package wolf.north.parcelscannerapp.mvvm.view.History
+package wolf.north.parcelscannerapp.mvvm.view.history
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

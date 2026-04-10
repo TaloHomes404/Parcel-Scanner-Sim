@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.ParcelScannerSim" parent="android:Theme.Material.Light.NoActionBar" />
+
+
 </resources>

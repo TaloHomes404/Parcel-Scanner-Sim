@@ -1,4 +1,4 @@
-package wolf.north.parcelscannerapp.mvvm.view.Home
+package wolf.north.parcelscannerapp.mvvm.view.home
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
