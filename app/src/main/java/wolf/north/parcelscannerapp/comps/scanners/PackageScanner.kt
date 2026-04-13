@@ -54,6 +54,10 @@ fun PackageScannerScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.uiState
 
+    //State of flashlight value
+    var isFlashOn by remember { mutableStateOf(false) }
+
+
     LaunchedEffect(Unit) {
         viewModel.initScanner(context)
     }
@@ -165,6 +169,10 @@ fun PackageScannerScreen(
                         }
                     }
                 )
+            },
+            onClose = { onNavigateBack() },
+            onToggleFlash = {
+                isFlashOn = !isFlashOn
             }
         )
 

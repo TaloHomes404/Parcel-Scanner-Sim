@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import wolf.north.parcelscannerapp.comps.cards.ScannerCard
+import wolf.north.parcelscannerapp.comps.cards.StatsCard
 import wolf.north.parcelscannerapp.comps.items.RecentScanItem
 import wolf.north.parcelscannerapp.comps.scanners.FormScannerScreen
 import wolf.north.parcelscannerapp.comps.scanners.PackageScannerScreen
@@ -126,6 +127,15 @@ fun HomeScreenContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        StatsCard(
+            scanned = 2,
+            delivered = 1,
+            inTransit = 0,
+            onCardClick = {  }
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -147,10 +157,11 @@ fun HomeScreenContent(
             }
         }
 
+
         Spacer(modifier = Modifier.height(8.dp))
         //Last scanned history
         LazyColumn(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.height(350.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             //  Packages
