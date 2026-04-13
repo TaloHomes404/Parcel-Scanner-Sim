@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,55 +33,42 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ScannerCard(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     title: String,
     description: String,
-    iconBackgroundColor: Color,
+    iconColor: Color,
     onClick: () -> Unit
 ) {
     Card(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp),
-        shape = RoundedCornerShape(24.dp),
+        modifier = modifier
+            .aspectRatio(1f),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f) // Delikatne tło karty
-        )
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Icon container
-            Box(
-                modifier = Modifier
-                    .size(64.dp)
-                    .background(
-                        iconBackgroundColor.copy(alpha = 0.15f),
-                        shape = RoundedCornerShape(16.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = title,
-                    modifier = Modifier.size(28.dp),
-                    tint = iconBackgroundColor
+                    tint = iconColor,
+                    modifier = Modifier.size(42.dp)
                 )
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
 
             Column {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold
                 )
-                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,

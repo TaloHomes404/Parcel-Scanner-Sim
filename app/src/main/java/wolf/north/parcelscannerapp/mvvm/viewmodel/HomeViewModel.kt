@@ -3,8 +3,14 @@ package wolf.north.parcelscannerapp.mvvm.viewmodel
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
+import wolf.north.parcelscannerapp.mvvm.model.files.Form
 import wolf.north.parcelscannerapp.mvvm.view.home.HomeUiState
 import wolf.north.parcelscannerapp.mvvm.view.home.ScanType
+import wolf.north.parcelscannerapp.repository.ScanRepository
+
 
 class HomeViewModel : ViewModel(){
 
@@ -13,6 +19,20 @@ class HomeViewModel : ViewModel(){
     //ui state values in viewmodel
     private val _uiState = mutableStateOf(HomeUiState())
     val uiState: State<HomeUiState> = _uiState
+
+
+    //Connecting values with repository
+    val packages = ScanRepository.packages.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        emptyList()
+    )
+
+    val forms = ScanRepository.forms.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        emptyList()
+    )
 
 
     //methods

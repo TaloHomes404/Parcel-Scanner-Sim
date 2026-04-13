@@ -3,6 +3,7 @@ package wolf.north.parcelscannerapp.mvvm.view.home
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,29 +12,42 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Inventory2
+import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import wolf.north.parcelscannerapp.comps.cards.ScannerCard
+import wolf.north.parcelscannerapp.comps.items.RecentScanItem
 import wolf.north.parcelscannerapp.comps.scanners.FormScannerScreen
 import wolf.north.parcelscannerapp.comps.scanners.PackageScannerScreen
 import wolf.north.parcelscannerapp.mvvm.viewmodel.HomeViewModel
@@ -44,25 +58,22 @@ import wolf.north.parcelscannerapp.mvvm.viewmodel.HomeViewModel
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(),
-    onScannerVisibilityChanged: (Boolean) -> Unit = {   }
+    onScannerVisibilityChanged: (Boolean) -> Unit = {}
 ) {
 
-    //Home screen vals
-    //State from HomeUiState hoisted in screen
     val state by viewModel.uiState
+    val packages by viewModel.packages.collectAsState()
+    val forms by viewModel.forms.collectAsState()
 
-    //State value for scanner visibility
     var showScanner by remember { mutableStateOf(false) }
-
-    //Material Theme val
     val colorScheme = MaterialTheme.colorScheme
 
-    LaunchedEffect(showScanner){
+    LaunchedEffect(showScanner) {
         onScannerVisibilityChanged(showScanner)
     }
-
-    if(showScanner) {
-        when(state.selectedScanType) {
+    
+    if (showScanner) {
+        when (state.selectedScanType) {
             ScanType.FORM -> FormScannerScreen(
                 onNavigateBack = { showScanner = false }
             )
@@ -73,135 +84,157 @@ fun HomeScreenContent(
                 onNavigateBack = { showScanner = false }
             )
         }
-        return
+        return 
     }
 
-    //Home screen content
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+
+    ) {
+
+        // Package / Forms Cards
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            ScannerCard(
+                modifier = Modifier.weight(1f),
+                icon = Icons.Default.Inventory2,
+                title = "Scan Package",
+                description = "Scan package label",
+                iconColor = Color(0xFF4CAF50),
+                onClick = {
+                    viewModel.onPackageSelected()
+                    showScanner = true
+                }
+            )
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+            ScannerCard(
+                modifier = Modifier.weight(1f),
+                icon = Icons.Default.Description,
+                title = "Scan Form",
+                description = "Digitalize document",
+                iconColor = Color(0xFF2196F3),
+                onClick = {
+                    viewModel.onFormSelected()
+                    showScanner = true
+                }
+            )
+        }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Last scanned",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            TextButton(onClick = { /* TODO Nawigacja do historii */ }) {
+                Text("See All")
+                Icon(
+                    Icons.Default.ArrowForward,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+        //Last scanned history
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            //  Packages
+            items(packages) { packageData ->
+                RecentScanItem(
+                    icon = {
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = colorScheme.primaryContainer,
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    Icons.Default.Inventory2,
+                                    contentDescription = null,
+                                    tint = colorScheme.primary
+                                )
+                            }
+                        }
+                    },
+                    overlineText = packageData.courier.displayName,
+                    mainText = packageData.trackingNumber,
+                    subText = packageData.scanDate,
+                    onClick = { }
+                )
+            }
+
+            //  Forms
+            items(forms) { formData ->
+                RecentScanItem(
+                    icon = {
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = colorScheme.tertiaryContainer,
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    Icons.Default.Description,
+                                    contentDescription = null,
+                                    tint = colorScheme.tertiary
+                                )
+                            }
+                        }
+                    },
+                    overlineText = "Formularz",
+                    mainText = formData.getFullName(),
+                    subText = formData.date ?: "Brak daty",
+                    onClick = { }
+                )
+            }
+
+            //  (Empty State)
+            if (packages.isEmpty() && forms.isEmpty()) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 32.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // Package Button
-                        ScanTypeCard(
-                            modifier = Modifier.weight(1f),
-                            icon = Icons.Default.Inventory2,
-                            label = "Package",
-                            isSelected = state.selectedScanType == ScanType.PACKAGE,
-                            onClick = { viewModel.onPackageSelected() }
+                        Icon(
+                            Icons.Outlined.History,
+                            contentDescription = null,
+                            modifier = Modifier.size(48.dp),
+                            tint = colorScheme.onSurfaceVariant
                         )
-
-                        // Form Button
-                        ScanTypeCard(
-                            modifier = Modifier.weight(1f),
-                            icon = Icons.Default.Description,
-                            label = "Form",
-                            isSelected = state.selectedScanType == ScanType.FORM,
-                            onClick = { viewModel.onFormSelected() }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            "No last scans in history",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = colorScheme.onSurfaceVariant
                         )
                     }
-
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    Text("Click to capture",
-                        fontSize = 24.sp,
-                        color = if (state.selectedScanType != null) colorScheme.onSurface else colorScheme.onSurface.copy(alpha = 0.6f))
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Icon(
-                        imageVector = Icons.Default.CameraAlt,
-                        contentDescription = "Open scanner",
-                        modifier = Modifier
-                            .size(106.dp)
-                            .clickable(enabled = state.selectedScanType != null) {
-                                showScanner = true
-                            },
-                        tint = if (state.selectedScanType != null) colorScheme.primary else colorScheme.onSurface.copy(alpha = 0.6f)
-                    )
                 }
             }
         }
     }
+}
+
 
 
 @Preview
 @Composable
 private fun HomeScreenContentPreview() {
     HomeScreenContent()
-}
-
-@Composable
-fun ScanTypeCard(
-    modifier: Modifier = Modifier,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = modifier
-            .height(140.dp)
-            .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) {
-                MaterialTheme.colorScheme.primaryContainer
-            } else {
-                MaterialTheme.colorScheme.surface
-            }
-        ),
-        border = if (isSelected) {
-            BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-        } else {
-            BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-        },
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isSelected) 8.dp else 2.dp
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = label,
-                modifier = Modifier.size(48.dp),
-                tint = if (isSelected) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                }
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = label,
-                style = MaterialTheme.typography.titleMedium,
-                color = if (isSelected) {
-                    MaterialTheme.colorScheme.onPrimaryContainer
-                } else {
-                    MaterialTheme.colorScheme.onSurface
-                },
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-            )
-        }
-    }
 }
