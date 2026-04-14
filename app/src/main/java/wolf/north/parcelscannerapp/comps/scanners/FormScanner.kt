@@ -167,6 +167,10 @@ fun FormScannerScreen(
                         }
                     }
                 )
+            },
+            onClose = { onNavigateBack() },
+            onGalleryToggle = {
+                //TODO: Gallery opening functionality + image/docx/json/excel file input
             }
         )
 
