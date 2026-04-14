@@ -10,15 +10,19 @@ import wolf.north.parcelscannerapp.mvvm.model.files.Form
 import wolf.north.parcelscannerapp.mvvm.view.home.HomeUiState
 import wolf.north.parcelscannerapp.mvvm.view.home.ScanType
 import wolf.north.parcelscannerapp.repository.ScanRepository
+import wolf.north.parcelscannerapp.repository.UserSessionRepository
 
 
 class HomeViewModel : ViewModel(){
 
     //vals
-
     //ui state values in viewmodel
     private val _uiState = mutableStateOf(HomeUiState())
     val uiState: State<HomeUiState> = _uiState
+
+    //Singleton values set to get user/session flow for home screen
+    val currentUser = UserSessionRepository.currentUser
+    val currentSession = UserSessionRepository.currentSession
 
 
     //Connecting values with repository

@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import wolf.north.parcelscannerapp.mvvm.model.worker.WorkerSession
+import wolf.north.parcelscannerapp.repository.UserSessionRepository
 import wolf.north.parcelscannerapp.repository.WorkersRepository
 
 
@@ -15,6 +16,10 @@ class ProfileViewModel : ViewModel() {
     // UI State vals
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+
+    //Repository singleton instance in profile view model to control user/session flow
+    val currentUser = UserSessionRepository.currentUser
+    val currentSession = UserSessionRepository.currentSession
 
 
 
@@ -27,6 +32,9 @@ class ProfileViewModel : ViewModel() {
 
         if (user != null ){
             //Login with user NFC Card successfully passed, creating session
+            //Set current user in whole app object to get values in every screen
+            UserSessionRepository.login(user)
+
             val newSession = WorkerSession(
                 sessionID = System.currentTimeMillis().toString(),
                 userID = user.id,
@@ -52,6 +60,7 @@ class ProfileViewModel : ViewModel() {
     //TODO: Later add analysis and charts sending for logout method
 
     fun logout(){
-        _uiState.value = ProfileUiState( isLoggedIn = false )
+        UserSessionRepository.logout()
+        _uiState.value = ProfileUiState() // Reset of local state
     }
 }

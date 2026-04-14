@@ -69,6 +69,9 @@ fun HomeScreenContent(
     var showScanner by remember { mutableStateOf(false) }
     val colorScheme = MaterialTheme.colorScheme
 
+    //Get current session from viewmodel singleton instance object
+    val currentSession by viewModel.currentSession.collectAsState()
+
     LaunchedEffect(showScanner) {
         onScannerVisibilityChanged(showScanner)
     }
@@ -128,8 +131,8 @@ fun HomeScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         StatsCard(
-            scannedPackages = 2,
-            scannedForms = 1,
+            scannedPackages = currentSession?.scannedPackages ?: 0,
+            scannedForms = currentSession?.scannedForms ?: 0,
             inTransit = 0,
             onCardClick = {  }
         )
