@@ -10,12 +10,12 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 
 @Composable
 fun StatsPieChart(
-    scanned: Int,
-    delivered: Int,
+    scannedPackages: Int,
+    scannedForms: Int,
     inTransit: Int,
     modifier: Modifier = Modifier
 ) {
-    val total = (scanned + delivered + inTransit).toFloat()
+    val total = (scannedPackages + scannedForms + inTransit).toFloat()
 
     // Section of pie chart slices color definition
     val scannedColor = MaterialTheme.colorScheme.primary
@@ -50,8 +50,8 @@ fun StatsPieChart(
             }
         }
 
-        drawSlice(scanned, scannedColor)
-        drawSlice(delivered, deliveredColor)
+        drawSlice(scannedPackages, scannedColor)
+        drawSlice(scannedForms, deliveredColor)
         drawSlice(inTransit, inTransitColor)
     }
 }

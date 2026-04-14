@@ -30,10 +30,10 @@ import wolf.north.parcelscannerapp.utils.formatTime
 
 @Composable
 fun ProfileScreen(
+    modifier: Modifier = Modifier,
     uiState: ProfileUiState = ProfileUiState(),
     onEditClick: () -> Unit = {},
     onMenuClick: (String) -> Unit = {},
-    modifier: Modifier = Modifier
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
@@ -78,8 +78,8 @@ fun ProfileScreen(
         //Pie chart card
         item {
             StatsCard(
-                scanned = (session?.scannedPackages ?: 0) + ((session?.scannedForms ?: 0)),
-                delivered = 1,
+                scannedPackages = session?.scannedPackages ?: 0,
+                scannedForms = session?.scannedForms ?: 0,
                 inTransit = 0,
                 onCardClick = {  }
             )

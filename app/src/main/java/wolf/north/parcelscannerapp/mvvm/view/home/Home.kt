@@ -128,8 +128,8 @@ fun HomeScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         StatsCard(
-            scanned = 2,
-            delivered = 1,
+            scannedPackages = 2,
+            scannedForms = 1,
             inTransit = 0,
             onCardClick = {  }
         )

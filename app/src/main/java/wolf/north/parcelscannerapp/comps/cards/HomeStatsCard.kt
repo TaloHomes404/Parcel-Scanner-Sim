@@ -27,13 +27,13 @@ import wolf.north.parcelscannerapp.comps.charts.StatsPieChart
 
 @Composable
 fun StatsCard(
-    scanned: Int,
-    delivered: Int,
+    scannedPackages: Int,
+    scannedForms: Int,
     inTransit: Int,
     modifier: Modifier = Modifier,
     onCardClick: () -> Unit = {}
 ) {
-    val total = scanned + delivered + inTransit
+    val total = scannedPackages + scannedForms + inTransit
 
     ElevatedCard(
         onClick = onCardClick,
@@ -53,13 +53,13 @@ fun StatsCard(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 StatRow(
-                    label = "Zeskanowane",
-                    value = scanned,
+                    label = "Zeskanowane Paczki",
+                    value = scannedPackages,
                     color = MaterialTheme.colorScheme.primary
                 )
                 StatRow(
-                    label = "Dostarczone",
-                    value = delivered,
+                    label = "Zeskanowane Formularze",
+                    value = scannedForms,
                     color = Color(0xFF4CAF50) // Green
                 )
                 StatRow(
@@ -77,8 +77,8 @@ fun StatsCard(
                 contentAlignment = Alignment.Center
             ) {
                 StatsPieChart(
-                    scanned = scanned,
-                    delivered = delivered,
+                    scannedPackages = scannedPackages,
+                    scannedForms = scannedForms,
                     inTransit = inTransit,
                     modifier = Modifier.size(110.dp)
                 )
