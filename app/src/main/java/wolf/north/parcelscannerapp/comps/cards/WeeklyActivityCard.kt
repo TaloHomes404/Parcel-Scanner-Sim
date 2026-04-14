@@ -17,8 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import wolf.north.parcelscannerapp.mvvm.view.Profile.BarChartItem
-import wolf.north.parcelscannerapp.mvvm.view.Profile.DayActivity
+import wolf.north.parcelscannerapp.mvvm.view.profile.BarChartItem
+import wolf.north.parcelscannerapp.mvvm.view.profile.DayActivity
 
 
 

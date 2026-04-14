@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +34,8 @@ fun EmployeeProfileCard(
     name: String,
     employeeId: String,
     email: String,
+    position: String,
+    startTime: String,
     onEditClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -82,13 +86,30 @@ fun EmployeeProfileCard(
                         style = MaterialTheme.typography.bodyMedium,
                         color = colorScheme.onSurfaceVariant
                     )
-                    Text(
-                        text = email,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = colorScheme.onSurfaceVariant
-                    )
+                    if (email.isNotEmpty()) {
+                        Text(
+                            text = email,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
+
+            if (startTime != "--:--") {
+                Spacer(modifier = Modifier.height(12.dp))
+                HorizontalDivider(color = colorScheme.surfaceVariant)
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text("Start zmiany:", color = colorScheme.onSurfaceVariant)
+                    Text(startTime, fontWeight = FontWeight.Bold, color = colorScheme.onSurface)
+                }
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
 
             //edit icon
             IconButton(

@@ -1,4 +1,4 @@
-package wolf.north.parcelscannerapp.mvvm.view.Profile
+package wolf.north.parcelscannerapp.mvvm.view.profile
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -8,41 +8,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.QrCodeScanner
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import wolf.north.parcelscannerapp.comps.cards.EmployeeProfileCard
 import wolf.north.parcelscannerapp.comps.cards.StatsCard
 import wolf.north.parcelscannerapp.comps.cards.WeeklyActivityCard
 import wolf.north.parcelscannerapp.comps.items.ProfileMenuItem
-import kotlin.random.Random
+import wolf.north.parcelscannerapp.mvvm.viewmodel.profileviewmodel.ProfileUiState
+import wolf.north.parcelscannerapp.utils.formatTime
 
 
 @Composable
 fun ProfileScreen(
+    uiState: ProfileUiState = ProfileUiState(),
+    onEditClick: () -> Unit = {},
+    onMenuClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
     //placeholders vals for cards
-    val userName = "Jan Kowalski"
-    val userInitials = "JK" // Placeholder for initials
-    val userId = "EMP-1042"
-    val userEmail = "jan.kowalski@firma.pl"
+    val user = uiState.currentUser
+    val session = uiState.currentSession
 
     LazyColumn(
         modifier = modifier
@@ -55,19 +52,33 @@ fun ProfileScreen(
 
         // Worker info card
         item {
-            EmployeeProfileCard(
-                initials = userInitials,
-                name = userName,
-                employeeId = userId,
-                email = userEmail,
-                onEditClick = { /* TODO: Nawigacja do edycji */ }
-            )
+            if (user != null) {
+                EmployeeProfileCard(
+                    initials = "${user.name.firstOrNull() ?: ""}${user.lastName.firstOrNull() ?: ""}",  // Simple initials getter
+                    name = "${user.name} ${user.lastName}",
+                    employeeId = user.id,
+                    email = "${user.name.lowercase()}.${user.lastName.lowercase()}@firma.pl",
+                    position = user.position,
+                    startTime = formatTime(session?.startTime),
+                    onEditClick = onEditClick
+                )
+            } else {
+                EmployeeProfileCard(
+                    initials = "AB",
+                    name = "Imie Nazwisko",
+                    employeeId = "ID:",
+                    email = "",
+                    position = "",
+                    startTime = "--:--",
+                    onEditClick = onEditClick
+                )
+            }
         }
 
         //Pie chart card
         item {
             StatsCard(
-                scanned = 2,
+                scanned = (session?.scannedPackages ?: 0) + ((session?.scannedForms ?: 0)),
                 delivered = 1,
                 inTransit = 0,
                 onCardClick = {  }
