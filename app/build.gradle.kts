@@ -71,6 +71,13 @@ dependencies {
     implementation(libs.barcode.scanning)
     implementation(libs.text.recognition)
 
+    //Retrofit (API)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // Conversion helper JSON > Kotlin obj.
+
+    //OKHttp
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+
     //Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
 
