@@ -3,7 +3,9 @@ package wolf.north.parcelscannerapp.repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import wolf.north.parcelscannerapp.api.RetrofitInstance
 import wolf.north.parcelscannerapp.mvvm.model.User
+import wolf.north.parcelscannerapp.mvvm.model.login.LoginRequest
 import wolf.north.parcelscannerapp.mvvm.model.worker.WorkerSession
 
 object UserSessionRepository {
@@ -15,6 +17,10 @@ object UserSessionRepository {
     val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
     val currentSession: StateFlow<WorkerSession?> = _currentSession.asStateFlow()
 
+    //val for handling error messages from api calls exceptions (to user across UI)
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+
     // Logon NFC for user/session
     fun login(user: User) {
         _currentUser.value = user
@@ -24,6 +30,28 @@ object UserSessionRepository {
             startTime = System.currentTimeMillis()
         )
     }
+
+    suspend fun login(cardUid: String): Boolean {
+        return try {
+            //Send ID of Card to API Call for auth
+            val response = RetrofitInstance.api.login(LoginRequest(cardUid))
+
+            if (response.isSuccessful && response.body() != null ) {
+                //Successfully handle user logon
+                val loginData = response.body()!!
+                _currentUser.value = loginData.user
+                _currentSession.value = loginData.session
+                true
+            } else {
+                _errorMessage.value = "Nieznana karta lub brak dostępu"
+                false
+            }
+        } catch (e: Exception) {
+            _errorMessage.value = "Błąd sieci przy logowaniu"
+            false
+        }
+    }
+
 
     // Counter of package increaser helper method
     fun incrementPackageCount() {

@@ -6,6 +6,8 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import wolf.north.parcelscannerapp.mvvm.model.files.Form
 import wolf.north.parcelscannerapp.mvvm.model.files.Package
+import wolf.north.parcelscannerapp.mvvm.model.login.LoginRequest
+import wolf.north.parcelscannerapp.mvvm.model.login.LoginResponse
 
 
 interface LogisticsApiService {
@@ -25,4 +27,8 @@ interface LogisticsApiService {
     // POST - Sending scanned forms into Api
     @POST("history/forms")
     suspend fun saveForm(@Body form: Form): Response<Form>
+
+    @POST("auth/login")
+    suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
+
 }
