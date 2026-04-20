@@ -59,6 +59,7 @@ object ScanRepository {
         return try {
             val response = api.savePackage(packageData)
             if(response.isSuccessful) {
+                //Cache list in our UI, add new package to refresh UI on call
                 _packages.value = listOf(packageData) + _packages.value
                 true
             } else {
@@ -75,6 +76,7 @@ object ScanRepository {
         return try {
             val response = api.saveForm(form)
             if(response.isSuccessful) {
+                //Cache list in our UI, add new package to refresh UI on call
                 _forms.value = listOf(form) + _forms.value
                 true
             } else {

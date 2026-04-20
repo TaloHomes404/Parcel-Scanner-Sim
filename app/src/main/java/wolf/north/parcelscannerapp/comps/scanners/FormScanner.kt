@@ -183,9 +183,14 @@ fun FormScannerScreen(
                 form = formData,
                 onDismiss = { viewModel.onDismissResult() },
                 onSave = {
-                    scope.launch { ScanRepository.addForm(formData) }
-                    viewModel.onDismissResult()
-                    onNavigateBack() },
+                    scope.launch {
+                        val success = ScanRepository.addForm(formData)
+                        if (success) {
+                            viewModel.onDismissResult()
+                            onNavigateBack()
+                        }
+                    }
+                  },
                 onShare = { /* TODO */ },
                 onEditAgain = { viewModel.onRetry() }
             )

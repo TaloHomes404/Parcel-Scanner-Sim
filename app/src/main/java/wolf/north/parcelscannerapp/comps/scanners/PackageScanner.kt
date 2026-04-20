@@ -185,9 +185,13 @@ fun PackageScannerScreen(
                 packageData = packageData,
                 onDismiss = { viewModel.onDismissResult() },
                 onSave = {
-                    scope.launch { ScanRepository.addPackage(packageData) }
-                    viewModel.onDismissResult()
-                    onNavigateBack()
+                    scope.launch {
+                        val success = ScanRepository.addPackage(packageData)
+                        if (success) {
+                            viewModel.onDismissResult()
+                            onNavigateBack()
+                        }
+                    }
                 },
                 onShare = { /* TODO */ },
                 onRescan = { viewModel.onRetry() }
