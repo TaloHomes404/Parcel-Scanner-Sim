@@ -21,20 +21,30 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +55,7 @@ import wolf.north.parcelscannerapp.comps.PackageBottomBarResults
 import wolf.north.parcelscannerapp.mvvm.model.files.Form
 import wolf.north.parcelscannerapp.mvvm.model.files.Package
 import wolf.north.parcelscannerapp.mvvm.viewmodel.HistoryViewModel
+import wolf.north.parcelscannerapp.repository.ScanRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,92 +66,150 @@ fun HistoryScreenContent(
 ) {
     val packages by viewModel.packages.collectAsState()
     val forms by viewModel.forms.collectAsState()
+    val isLoading by viewModel.isLoading
+    val errorMessage by viewModel.errorMessage.collectAsState()
     val state by viewModel.uiState
-    val colorScheme = MaterialTheme.colorScheme
+
+    //Screen specific vals
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let { msg ->
+            val result = snackbarHostState.showSnackbar(
+                message = msg,
+                actionLabel = "Ponów próbę",
+                duration = SnackbarDuration.Long
+            )
+            // IF user click retry button
+            if (result == SnackbarResult.ActionPerformed) {
+                viewModel.refreshData()
+            }
+            // Clean error message state after succesfully retrying api call
+            ScanRepository.clearError()
+        }
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
     ) {
-        LazyColumn(
-            modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            // Packages section
-            if (packages.isNotEmpty()) {
-                item {
-                    Text(
-                        text = "Packages (${packages.size})",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                }
 
-                items(packages) { packageData ->
-                    ScanParcelItem(
-                        packageData = packageData,
-                        onViewDetails = { viewModel.showPackageDetails(packageData) },
-                        onShare = { /* TODO */ }
-                    )
-                }
-            }
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center),
+                color = colorScheme.primary
+            )
+        } else {
 
-            // Forms section
-            if (forms.isNotEmpty()) {
-                item {
-                    Text(
-                        text = "Forms (${forms.size})",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(vertical = 8.dp).padding(top = 16.dp)
-                    )
-                }
+            LazyColumn(
+                modifier = modifier.fillMaxSize(),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
 
-                items(forms) { formData ->
-                    ScanFormItem(
-                        formData = formData,
-                        onViewDetails = { viewModel.showFormDetails(formData) },
-                        onShare = { /* TODO */ }
-                    )
-                }
-            }
-
-            // Empty state
-            if (packages.isEmpty() && forms.isEmpty()) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 64.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                if (packages.isNotEmpty()) {
+                    item {
                         Text(
-                            text = "No scans yet",
+                            text = "Packages (${packages.size})",
                             style = MaterialTheme.typography.titleMedium,
-                            color = colorScheme.onSurfaceVariant
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(vertical = 8.dp)
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                    items(packages) { packageData ->
+                        ScanParcelItem(
+                            packageData = packageData,
+                            onViewDetails = { viewModel.showPackageDetails(packageData) },
+                            onShare = { /* TODO */ }
+                        )
+                    }
+                }
+
+
+                if (forms.isNotEmpty()) {
+                    item {
                         Text(
-                            text = "Start scanning to see history",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = colorScheme.onSurfaceVariant
+                            text = "Forms (${forms.size})",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(vertical = 8.dp).padding(top = 16.dp)
                         )
+                    }
+                    items(forms) { formData ->
+                        ScanFormItem(
+                            formData = formData,
+                            onViewDetails = { viewModel.showFormDetails(formData) },
+                            onShare = { /* TODO */ }
+                        )
+                    }
+                }
+
+
+                if (packages.isEmpty() && forms.isEmpty()) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 64.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            if (errorMessage != null) {
+                                Icon(
+                                    imageVector = Icons.Outlined.WifiOff,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(48.dp),
+                                    tint = colorScheme.error
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    "Błąd połączenia z serwerem",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = colorScheme.error
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    "Sprawdź połączenie z internetem",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = colorScheme.onSurfaceVariant
+                                )
+                            } else {
+
+                                Text(
+                                    text = "No scans yet",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = colorScheme.onSurfaceVariant
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "Start scanning to see history",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
 
-        // Bottom sheets
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+
+
         state.selectedPackage?.let { packageData ->
             PackageBottomBarResults(
                 packageData = packageData,
                 onDismiss = { viewModel.dismissDetails() },
                 onSave = {},
                 onShare = { /* TODO */ },
-                onRescan = { viewModel.deletePackage(packageData) }
+                onRescan = { }
             )
         }
 
@@ -150,7 +219,7 @@ fun HistoryScreenContent(
                 onDismiss = { viewModel.dismissDetails() },
                 onSave = {},
                 onShare = { /* TODO */ },
-                onEditAgain = { viewModel.deleteForm(formData) }
+                onEditAgain = { }
             )
         }
     }
