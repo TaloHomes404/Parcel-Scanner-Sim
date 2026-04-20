@@ -3,49 +3,92 @@ package wolf.north.parcelscannerapp.repository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import okio.IOException
+import wolf.north.parcelscannerapp.api.RetrofitInstance
 import wolf.north.parcelscannerapp.mvvm.model.files.Form
 import wolf.north.parcelscannerapp.mvvm.model.files.Package
 
 
-//Singleton - single instance for whole app (for MVP - testing purposes)
+//Singleton - Scan Repository changed for API Calls with Retrofit
+//Error message now handled in vm
 object ScanRepository {
 
-    //List of packages
+    //Instance of api
+    private val api = RetrofitInstance.api
+
+    //local state for caching in app
     private val _packages = MutableStateFlow<List<Package>>(emptyList())
     val packages: StateFlow<List<Package>> = _packages.asStateFlow()
 
-    //List of forms
     private val _forms = MutableStateFlow<List<Form>>(emptyList())
     val forms: StateFlow<List<Form>> = _forms.asStateFlow()
 
-    //**
-    //Methods
-    //**
+    //vals for handling error messages from api calls exceptions (to user across UI)
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
-    // Add - Package
-    fun addPackage(packageData: Package){
-        _packages.value = listOf(packageData) + _packages.value
+    //Get all data suspender function 1 - GET
+    suspend fun fetchAllData(){
+        try {
+            //Get all packages from api
+            val packageResponse = api.getPackages()
+            if (packageResponse.isSuccessful && packageResponse.body() != null) {
+                _packages.value = packageResponse.body()!!
+            } else {
+                _errorMessage.value = "Wystąpił błąd w pobieraniu paczek: ${packageResponse.code()}"
+            }
+
+            //Get all forms from api
+            val formsResponse = api.getForms()
+            if (formsResponse.isSuccessful && formsResponse.body() != null) {
+                _forms.value = formsResponse.body()!!
+            } else {
+                _errorMessage.value = "Wystąpił błąd w pobieraniu formularzy: ${formsResponse.code()}"
+            }
+
+
+        } catch (e: IOException) {
+            //Network issue exception
+            _errorMessage.value = "Błąd z połączeniem z internetem"
+        } catch (e: Exception) {
+            _errorMessage.value = "Wystąpił nieoczekiwany błąd: ${e.message}"
+        }
     }
 
-    // Delete - Package
-    fun deletePackage(packageData: Package){
-        _packages.value = _packages.value.filter { it != packageData }
+    suspend fun addPackage(packageData: Package): Boolean {
+        return try {
+            val response = api.savePackage(packageData)
+            if(response.isSuccessful) {
+                _packages.value = listOf(packageData) + _packages.value
+                true
+            } else {
+                _errorMessage.value = "Nie udało się zapisać paczki"
+                false
+            }
+        } catch (e: Exception) {
+            _errorMessage.value = "Błąd sieci przy zapisie paczki"
+            false
+        }
     }
 
-    // Add - Form
-    fun addForm(form: Form){
-        _forms.value = listOf(form) + _forms.value
+    suspend fun addForm(form: Form): Boolean {
+        return try {
+            val response = api.saveForm(form)
+            if(response.isSuccessful) {
+                _forms.value = listOf(form) + _forms.value
+                true
+            } else {
+                _errorMessage.value = "Nie udało się zapisać formularza"
+                false
+            }
+        } catch (e: Exception) {
+            _errorMessage.value = "Błąd sieci przy zapisie formularza"
+            false
+        }
     }
 
-    // Delete - Form
-    fun deleteForm(form: Form){
-        _forms.value = _forms.value.filter { it != form }
-    }
-
-    // Delete - EVERYTHING, EVEN APP
-    fun clearAll() {
-        _packages.value = emptyList()
-        _forms.value = emptyList()
+    fun clearError(){
+        _errorMessage.value = null
     }
 
 }
