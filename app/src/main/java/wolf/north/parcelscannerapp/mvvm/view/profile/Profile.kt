@@ -15,16 +15,20 @@ import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import wolf.north.parcelscannerapp.comps.cards.EmployeeProfileCard
 import wolf.north.parcelscannerapp.comps.cards.StatsCard
 import wolf.north.parcelscannerapp.comps.cards.WeeklyActivityCard
 import wolf.north.parcelscannerapp.comps.items.ProfileMenuItem
 import wolf.north.parcelscannerapp.mvvm.viewmodel.profileviewmodel.ProfileUiState
+import wolf.north.parcelscannerapp.mvvm.viewmodel.profileviewmodel.ProfileViewModel
 import wolf.north.parcelscannerapp.utils.formatTime
 
 
@@ -32,14 +36,17 @@ import wolf.north.parcelscannerapp.utils.formatTime
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     uiState: ProfileUiState = ProfileUiState(),
+    viewModel: ProfileViewModel = viewModel(),
     onEditClick: () -> Unit = {},
+    onLogoutSuccess: () -> Unit = {},
     onMenuClick: (String) -> Unit = {},
 ) {
     val colorScheme = MaterialTheme.colorScheme
 
     //placeholders vals for cards
-    val user = uiState.currentUser
-    val session = uiState.currentSession
+    val user by viewModel.currentUser.collectAsState()
+    val session by viewModel.currentSession.collectAsState()
+    val stats by viewModel.stats.collectAsState()
 
     LazyColumn(
         modifier = modifier
@@ -54,11 +61,11 @@ fun ProfileScreen(
         item {
             if (user != null) {
                 EmployeeProfileCard(
-                    initials = "${user.name.firstOrNull() ?: ""}${user.lastName.firstOrNull() ?: ""}",  // Simple initials getter
-                    name = "${user.name} ${user.lastName}",
-                    employeeId = user.id,
-                    email = "${user.name.lowercase()}.${user.lastName.lowercase()}@firma.pl",
-                    position = user.position,
+                    initials = "${user?.name?.firstOrNull() ?: ""}${user?.lastName?.firstOrNull() ?: ""}",  // Simple initials getter
+                    name = "${user?.name} ${user?.lastName}",
+                    employeeId = user?.id ?: "ID:",
+                    email = "${user?.name?.lowercase()}.${user?.lastName?.lowercase()}@firma.pl",
+                    position = user?.position ?: "Position:",
                     startTime = formatTime(session?.startTime),
                     onEditClick = onEditClick
                 )
@@ -78,8 +85,8 @@ fun ProfileScreen(
         //Pie chart card
         item {
             StatsCard(
-                scannedPackages = session?.scannedPackages ?: 0,
-                scannedForms = session?.scannedForms ?: 0,
+                scannedPackages = stats?.totalPackages ?: session?.scannedPackages ?: 0,
+                scannedForms = stats?.totalForms ?: session?.scannedForms ?: 0,
                 inTransit = 0,
                 onCardClick = {  }
             )
@@ -87,7 +94,9 @@ fun ProfileScreen(
 
         // Weekly activity worker card
         item {
-            WeeklyActivityCard()
+            WeeklyActivityCard(
+                activityData = stats?.weeklyActivity ?: emptyList()
+            )
         }
 
         item { Spacer(modifier = Modifier.height(8.dp)) }
@@ -141,7 +150,7 @@ fun ProfileScreen(
                         iconTint = colorScheme.secondary,
                         text = "Wyloguj",
                         onClick = {
-                            // TODO: Logika wylogowania
+                            viewModel.onLogoutClick(onLogoutSuccess)
                         },
                         showDivider = false
                     )

@@ -1,6 +1,7 @@
 package wolf.north.parcelscannerapp.comps.cards
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,17 +25,14 @@ import wolf.north.parcelscannerapp.mvvm.view.profile.DayActivity
 
 @Composable
 fun WeeklyActivityCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    activityData: List<DayActivity>
 ) {
-    val weekData = listOf(
-        DayActivity("P", 80f),
-        DayActivity("W", 60f),
-        DayActivity("Ś", 90f),
-        DayActivity("C", 45f),
-        DayActivity("P", 70f),
-        DayActivity("S", 30f),
-        DayActivity("N", 10f)
-    )
+    if (activityData.isEmpty()) {
+        // Placeholder lub pusty stan
+        Box(modifier = modifier.height(150.dp)) { Text("Brak danych") }
+        return
+    }
 
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
@@ -58,7 +56,7 @@ fun WeeklyActivityCard(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.Bottom
             ) {
-                weekData.forEach { day ->
+                activityData.forEach { day ->
                     BarChartItem(
                         label = day.dayName,
                         value = day.value

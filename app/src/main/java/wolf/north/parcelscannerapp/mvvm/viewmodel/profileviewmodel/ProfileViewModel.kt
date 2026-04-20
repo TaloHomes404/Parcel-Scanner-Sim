@@ -1,9 +1,12 @@
 package wolf.north.parcelscannerapp.mvvm.viewmodel.profileviewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import wolf.north.parcelscannerapp.mvvm.model.worker.WorkerSession
 import wolf.north.parcelscannerapp.repository.UserSessionRepository
 import wolf.north.parcelscannerapp.repository.WorkersRepository
@@ -20,8 +23,18 @@ class ProfileViewModel : ViewModel() {
     //Repository singleton instance in profile view model to control user/session flow
     val currentUser = UserSessionRepository.currentUser
     val currentSession = UserSessionRepository.currentSession
+    val stats = UserSessionRepository.stats
+
+    init {
+        refreshStats()
+    }
 
 
+    fun refreshStats() {
+        viewModelScope.launch {
+            UserSessionRepository.fetchStats()
+        }
+    }
 
     //Main method for scanning detected NFC Card
     fun onNFCCardDetected(cardUid: String){
@@ -59,8 +72,17 @@ class ProfileViewModel : ViewModel() {
     //Logout card for button functionality
     //TODO: Later add analysis and charts sending for logout method
 
+    fun onLogoutClick(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            UserSessionRepository.logout()
+            onSuccess()
+        }
+    }
+
     fun logout(){
-        UserSessionRepository.logout()
-        _uiState.value = ProfileUiState() // Reset of local state
+        viewModelScope.launch {
+            UserSessionRepository.logout()
+            _uiState.value = ProfileUiState() // Reset of local state
+        }
     }
 }

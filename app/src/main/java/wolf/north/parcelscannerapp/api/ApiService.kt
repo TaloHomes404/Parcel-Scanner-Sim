@@ -8,6 +8,7 @@ import wolf.north.parcelscannerapp.mvvm.model.files.Form
 import wolf.north.parcelscannerapp.mvvm.model.files.Package
 import wolf.north.parcelscannerapp.mvvm.model.login.LoginRequest
 import wolf.north.parcelscannerapp.mvvm.model.login.LoginResponse
+import wolf.north.parcelscannerapp.mvvm.model.stats.UserStatsResponse
 
 
 interface LogisticsApiService {
@@ -30,5 +31,12 @@ interface LogisticsApiService {
 
     @POST("auth/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
+
+    @GET("user/stats")
+    suspend fun getUserStats(): Response<UserStatsResponse>
+
+    @POST("auth/logout")
+    suspend fun logout(): Response<Unit>
+
 
 }
