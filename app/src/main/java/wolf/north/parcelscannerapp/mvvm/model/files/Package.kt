@@ -1,11 +1,11 @@
 package wolf.north.parcelscannerapp.mvvm.model.files
 
 data class Package(
-    val trackingNumber: String,
-    val courier: Courier,
-    val scanDate: String,
-    val weightClass: WeightClass,
-    val shipmentType: ShipmentType
+    val trackingNumber: String = "",
+    val courier: Courier = Courier.UNKNOWN,
+    val scanDate: String = "",
+    val weightClass: WeightClass = WeightClass.A,
+    val shipmentType: ShipmentType = ShipmentType.PARCEL
 )
 
 enum class WeightClass(val displayName: String, val maxWeight: Double) {
