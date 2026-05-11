@@ -35,19 +35,6 @@ class HistoryViewModel : ViewModel() {
     var uiState = mutableStateOf(HistoryUiState())
         private set
 
-    //Init method to call on creating viewmodel state (entering screen handler)
-    init {
-        refreshData()
-    }
-
-    //Method for calling coroutine to do API Call and set in-viewmodel values
-    fun refreshData() {
-        viewModelScope.launch {
-            _isLoading.value = true
-            ScanRepository.fetchAllData()
-            _isLoading.value = false
-        }
-    }
 
     //Display package info from selected data
     fun showPackageDetails(packageData: Package) {

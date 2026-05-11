@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import wolf.north.parcelscannerapp.mvvm.model.files.Form
 import wolf.north.parcelscannerapp.mvvm.view.home.HomeUiState
 import wolf.north.parcelscannerapp.mvvm.view.home.ScanType
@@ -21,22 +22,12 @@ class HomeViewModel : ViewModel(){
     val uiState: State<HomeUiState> = _uiState
 
     //Singleton values set to get user/session flow for home screen
-    val currentUser = UserSessionRepository.currentUser
     val currentSession = UserSessionRepository.currentSession
 
 
-    //Connecting values with repository
-    val packages = ScanRepository.packages.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        emptyList()
-    )
-
-    val forms = ScanRepository.forms.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        emptyList()
-    )
+    //DATA for home screen
+    val packages = ScanRepository.packages
+    val forms = ScanRepository.forms
 
 
     //methods

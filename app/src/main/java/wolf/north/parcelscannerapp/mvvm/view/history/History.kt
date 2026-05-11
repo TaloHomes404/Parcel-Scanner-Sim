@@ -84,7 +84,7 @@ fun HistoryScreenContent(
             )
             // IF user click retry button
             if (result == SnackbarResult.ActionPerformed) {
-                viewModel.refreshData()
+                ScanRepository.fetchAllData()
             }
             // Clean error message state after succesfully retrying api call
             ScanRepository.clearError()

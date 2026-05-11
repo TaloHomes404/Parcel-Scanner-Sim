@@ -168,7 +168,7 @@ fun HomeScreenContent(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             //  Packages
-            items(packages) { packageData ->
+            items(packages.take(2)) { packageData ->
                 RecentScanItem(
                     icon = {
                         Surface(
@@ -193,7 +193,7 @@ fun HomeScreenContent(
             }
 
             //  Forms
-            items(forms) { formData ->
+            items(forms.take(2)) { formData ->
                 RecentScanItem(
                     icon = {
                         Surface(
