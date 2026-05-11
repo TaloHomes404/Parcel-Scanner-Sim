@@ -72,10 +72,10 @@ class ProfileViewModel : ViewModel() {
     //Logout card for button functionality
     //TODO: Later add analysis and charts sending for logout method
 
-    fun onLogoutClick(onSuccess: () -> Unit) {
+    fun onLogoutClick(onNavigateToLogin: () -> Unit) {
         viewModelScope.launch {
             UserSessionRepository.logout()
-            onSuccess()
+            onNavigateToLogin()
         }
     }
 

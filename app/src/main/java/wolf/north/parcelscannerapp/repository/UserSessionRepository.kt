@@ -90,12 +90,12 @@ object UserSessionRepository {
             try {
                 RetrofitInstance.api.logout()
             } catch (e: Exception) {
-                // Ignorujemy błędy, i tak czyścimy lokalnie
+
             } finally {
-                // Zawsze czyścimy lokalny stan
                 _currentUser.value = null
                 _currentSession.value = null
                 _stats.value = null
+                ScanRepository.clearLocalHistory()
             }
         }
 }

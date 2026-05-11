@@ -89,6 +89,11 @@ object ScanRepository {
         }
     }
 
+    fun clearLocalHistory() {
+        _packages.value = emptyList()
+        _forms.value = emptyList()
+    }
+
     fun clearError(){
         _errorMessage.value = null
     }

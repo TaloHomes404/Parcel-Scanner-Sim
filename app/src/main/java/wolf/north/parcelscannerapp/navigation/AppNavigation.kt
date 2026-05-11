@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,6 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import wolf.north.parcelscannerapp.mvvm.view.history.HistoryScreenContent
 import wolf.north.parcelscannerapp.mvvm.view.home.HomeScreenContent
 import wolf.north.parcelscannerapp.mvvm.view.login.LoginScreen
+import wolf.north.parcelscannerapp.mvvm.view.profile.ProfileScreen
 import wolf.north.parcelscannerapp.mvvm.view.splashscreen.SplashScreen
 import wolf.north.parcelscannerapp.mvvm.viewmodel.LoginViewModel
 import wolf.north.parcelscannerapp.ui.AppScaffold
@@ -53,9 +55,11 @@ fun AppNavigation(navController: NavHostController, nfcIntent: Intent?) {
             composable(Screen.Login.route) {
                 val viewModel: LoginViewModel = viewModel()
 
+                val loginSuccess by viewModel.loginSuccess.collectAsState()
+
                 // Coroutine for successfully login state
-                LaunchedEffect(viewModel.loginSuccess) {
-                    if (viewModel.loginSuccess.value) {
+                LaunchedEffect(loginSuccess) {
+                    if (loginSuccess) {
                         navController.navigate(Screen.Home.route) {
                             popUpTo(Screen.Login.route) { inclusive = true }
                         }
@@ -81,7 +85,12 @@ fun AppNavigation(navController: NavHostController, nfcIntent: Intent?) {
 
             // Profile content - loaded into composable scaffold
             composable(Screen.Profile.route) {
-                //ProfileScreenContent()
+                ProfileScreen(onLogoutSuccess = {
+                    navController.navigate("login"){
+                        popUpTo(0){ inclusive = true }
+                        launchSingleTop = true
+                    }
+                })
             }
         }
     }
